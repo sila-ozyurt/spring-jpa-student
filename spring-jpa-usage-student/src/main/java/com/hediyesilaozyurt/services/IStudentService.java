@@ -1,5 +1,7 @@
 package com.hediyesilaozyurt.services;
 
+import com.hediyesilaozyurt.dto.DtoStudent;
+import com.hediyesilaozyurt.dto.DtoStudentIU;
 import com.hediyesilaozyurt.entities.Student;
 import org.springframework.http.ResponseEntity;
 
@@ -8,7 +10,7 @@ import java.util.Optional;
 
 public interface IStudentService {
 
-    public Student saveStudent(Student student);
+    public DtoStudent saveStudent(DtoStudentIU student);
 
     public List<Student> list();
 
@@ -17,4 +19,7 @@ public interface IStudentService {
     public boolean existById(Integer id);
 
     public void delete(Integer id);
+
+    public Student update(Integer id,Student student);
+
 }

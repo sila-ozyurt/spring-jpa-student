@@ -16,4 +16,5 @@ public interface IStudentController {
 
     public ResponseEntity<?> delete(Integer id);
 
+    public Student update(Integer id,Student student);
 }

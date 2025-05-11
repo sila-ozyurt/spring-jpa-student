@@ -22,6 +22,12 @@ public class StudentControllerImpl implements IStudentController {
         return studentService.list();
     }
 
+    @PutMapping("/update/{id}")
+    @Override
+    public Student update(@PathVariable(name="id") Integer id, @RequestBody Student student) {
+        return studentService.update(id,student);
+    }
+
     @DeleteMapping(path="/delete/{id}")
     @Override
     public ResponseEntity<?> delete(@PathVariable(name ="id") Integer id) {
