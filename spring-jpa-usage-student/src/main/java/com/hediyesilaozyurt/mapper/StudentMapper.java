@@ -1,11 +1,16 @@
 package com.hediyesilaozyurt.mapper;
 
 import com.hediyesilaozyurt.dto.DtoStudent;
-import com.hediyesilaozyurt.dto.DtoStudentIU;
+import com.hediyesilaozyurt.dto.DtoStudentCard;
 import com.hediyesilaozyurt.entities.Student;
+import com.hediyesilaozyurt.entities.StudentCard;
+import jakarta.annotation.PostConstruct;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class StudentMapper {
@@ -13,11 +18,43 @@ public class StudentMapper {
     @Autowired
     private ModelMapper modelMapper;
 
-    public Student toEntity(DtoStudentIU dto){
-        return modelMapper.map(dto, Student.class);
+    @PostConstruct
+    public void setupMapper(){
+
+        // Entity to DTO mapping - ID included
+        modelMapper.typeMap(Student.class, DtoStudent.class);
+
+        // DTO to Entity mapping - ID skip
+        modelMapper.typeMap(DtoStudent.class, Student.class)
+                .addMappings(mapper->mapper.skip(Student::setId));
+    }
+
+    public Student toEntity(DtoStudent dto){
+       return dto!=null ? modelMapper.map(dto, Student.class):null;
     }
 
     public DtoStudent toDto(Student entity){
-        return modelMapper.map(entity, DtoStudent.class)
+        return entity!=null ? modelMapper.map(entity, DtoStudent.class):null;
+    }
+
+    public void updateEntityFromDto(DtoStudent dto, Student entity){
+        if(dto==null || entity==null)return;
+
+        Long originalId=entity.getId();
+        Long originalCardId=entity.getStudentCard()!=null ? entity.getStudentCard().getId():null;
+
+        modelMapper.map(dto,entity);
+
+
+        entity.setId(originalId);
+        if (entity.getStudentCard() != null && originalCardId != null) {
+            entity.getStudentCard().setId(originalCardId);
+        }
+    }
+
+    public List<DtoStudent> toDtoList(List<Student> students){
+        return students.stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
     }
 }

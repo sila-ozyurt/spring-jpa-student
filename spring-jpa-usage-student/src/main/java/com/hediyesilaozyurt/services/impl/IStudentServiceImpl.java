@@ -1,12 +1,12 @@
 package com.hediyesilaozyurt.services.impl;
 
 import com.hediyesilaozyurt.dto.DtoStudent;
-import com.hediyesilaozyurt.dto.DtoStudentIU;
 import com.hediyesilaozyurt.entities.Student;
+import com.hediyesilaozyurt.entities.StudentCard;
 import com.hediyesilaozyurt.mapper.StudentMapper;
 import com.hediyesilaozyurt.repository.StudentRepository;
 import com.hediyesilaozyurt.services.IStudentService;
-import org.springframework.beans.BeanUtils;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +23,9 @@ public class IStudentServiceImpl implements IStudentService {
     private StudentMapper studentMapper;
 
     @Override
-    public List<Student> list() {
-        return studentRepository.findAll();
+    public List<DtoStudent> list() {
+       List<Student> students= studentRepository.findAll();
+       return studentMapper.toDtoList(students);
     }
 
     @Override
@@ -33,7 +34,7 @@ public class IStudentServiceImpl implements IStudentService {
     }
 
     @Override
-    public DtoStudent saveStudent(DtoStudentIU dtoStudentIU) {
+    public DtoStudent saveStudent(DtoStudent dtoStudentIU) {
         Student student=studentMapper.toEntity(dtoStudentIU);
         Student dbStudent=studentRepository.save(student);
         return studentMapper.toDto(dbStudent);
@@ -45,22 +46,47 @@ public class IStudentServiceImpl implements IStudentService {
     }
 
     @Override
-    public Student update(Integer id, Student student) {
-        Optional<Student> dbStudent=findById(id);
-        if(dbStudent.isPresent()){
-            Student existingStudent=dbStudent.get();
-
-            existingStudent.setFirstName(student.getFirstName());
-            existingStudent.setLastName(student.getLastName());
-            existingStudent.setBirthOfDate(student.getBirthOfDate());
-
-            return studentRepository.save(existingStudent);
+    public DtoStudent update(Integer id,DtoStudent dtoStudentIU) {
+        Optional<Student> optionalStudent=findEntityById(id);
+        if(optionalStudent.isPresent()){
+            Student dbStudent=optionalStudent.get();
+            // Apply the fields from the dto to the existing entity
+            studentMapper.updateEntityFromDto(dtoStudentIU,dbStudent);
+            // Save the updated entity to the database
+            Student updateStudent=studentRepository.save(dbStudent);
+            // Convert the updated entity back to a DTO and return it
+            return studentMapper.toDto(updateStudent);
         }
         return null;
     }
 
     @Override
-    public Optional<Student> findById(Integer id) {
+    public Optional<Student> findEntityById(Integer id) {
         return studentRepository.findById(id);
     }
+
+    @Override
+    public List<DtoStudent> sortByBirthDate() {
+        List<Student> students= studentRepository.sortByBirthDate();
+        return studentMapper.toDtoList(students);
+    }
+
+    @Override
+    public List<DtoStudent> searchByFirstName(String name) {
+        List<Student> students=studentRepository.searchByFirstName(name);
+        return studentMapper.toDtoList(students);
+    }
+
+    @Override
+    public Integer getNumberOfTotalStudents() {
+        return studentRepository.getNumberOfTotalStudents();
+    }
+
+    @Override
+    public Optional<DtoStudent> findById(Integer id) {
+        return studentRepository.findById(id)
+                .map(studentMapper::toDto);
+        //student -> studentMapper.toDto(student)
+    }
+
 }

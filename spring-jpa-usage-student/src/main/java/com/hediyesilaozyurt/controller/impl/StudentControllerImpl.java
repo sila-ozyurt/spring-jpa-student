@@ -1,11 +1,14 @@
 package com.hediyesilaozyurt.controller.impl;
 
 import com.hediyesilaozyurt.controller.IStudentController;
+import com.hediyesilaozyurt.dto.DtoStudent;
 import com.hediyesilaozyurt.entities.Student;
 import com.hediyesilaozyurt.services.IStudentService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.service.annotation.GetExchange;
 
 import java.util.*;
 
@@ -16,15 +19,21 @@ public class StudentControllerImpl implements IStudentController {
     @Autowired
     private IStudentService studentService;
 
+    @GetMapping(path="/search")
+    @Override
+    public List<DtoStudent> searchByFirstName(@RequestParam(value="name") String name) {
+        return studentService.searchByFirstName(name);
+    }
+
     @GetMapping(path="/list")
     @Override
-    public List<Student> list() {
+    public List<DtoStudent> list() {
         return studentService.list();
     }
 
     @PutMapping("/update/{id}")
     @Override
-    public Student update(@PathVariable(name="id") Integer id, @RequestBody Student student) {
+    public DtoStudent update(@PathVariable(name="id") Integer id, @RequestBody @Valid DtoStudent student) {
         return studentService.update(id,student);
     }
 
@@ -43,16 +52,27 @@ public class StudentControllerImpl implements IStudentController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping(path="/list/orderByDate")
+    @Override
+    public List<DtoStudent> sortByBirthDate() {
+        return studentService.sortByBirthDate();
+    }
+
+    @GetMapping(path="/count")
+    @Override
+    public Integer getNumberOfTotalStudents() {
+        return studentService.getNumberOfTotalStudents();
+    }
+
     @PostMapping(path = "/save")
     @Override
-    public Student saveStudent(@RequestBody Student student) {
-        System.out.println(student);
+    public DtoStudent saveStudent(@RequestBody @Valid DtoStudent student) {
         return studentService.saveStudent(student);
     }
 
     @GetMapping("/list/{id}")
     @Override
-    public Optional<Student> findById(@PathVariable(name="id") Integer id) {
+    public Optional<DtoStudent> findById(@PathVariable(name="id") Integer id) {
         return studentService.findById(id);
     }
 }

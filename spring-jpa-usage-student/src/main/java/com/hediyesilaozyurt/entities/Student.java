@@ -20,7 +20,11 @@ public class Student {
     @Column(name="id")
     @JsonProperty("id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
+
+    @Column(name="tckn",nullable = false,unique = true)
+    @JsonProperty("tckn")
+    private String tckn;
 
     @JsonProperty("firstName")
     @Column(name="first_name",nullable = false)
@@ -35,5 +39,13 @@ public class Student {
     /*@DateTimeFormat(iso=DateTimeFormat.ISO.DATE)*/
     @Column(name = "birth_of_date",nullable = true)
     private Date birthOfDate;
+
+    @Column(unique = true)
+    @JsonProperty("email")
+    private String email;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="card_id")
+    private StudentCard studentCard;
 
 }
