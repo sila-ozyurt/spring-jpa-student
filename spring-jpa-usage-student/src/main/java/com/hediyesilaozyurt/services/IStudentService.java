@@ -11,15 +11,15 @@ public interface IStudentService {
 
     public List<DtoStudent> list();
 
-    public Optional<DtoStudent> findById(Integer id);
+    public Optional<DtoStudent> findById(Long id);
 
-    public boolean existById(Integer id);
+    public boolean existById(Long id);
 
-    public void delete(Integer id);
+    public void delete(Long id);
 
-    public DtoStudent update(Integer id,DtoStudent student);
+    public DtoStudent update(Long id,DtoStudent student);
 
-    public Optional<Student> findEntityById(Integer id);
+    public Optional<Student> findEntityById(Long id);
 
     public List<DtoStudent> sortByBirthDate();
 

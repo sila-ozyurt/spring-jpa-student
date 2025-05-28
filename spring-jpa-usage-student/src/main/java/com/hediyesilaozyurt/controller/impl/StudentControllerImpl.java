@@ -33,13 +33,13 @@ public class StudentControllerImpl implements IStudentController {
 
     @PutMapping("/update/{id}")
     @Override
-    public DtoStudent update(@PathVariable(name="id") Integer id, @RequestBody @Valid DtoStudent student) {
+    public DtoStudent update(@PathVariable(name="id") Long id, @RequestBody @Valid DtoStudent student) {
         return studentService.update(id,student);
     }
 
     @DeleteMapping(path="/delete/{id}")
     @Override
-    public ResponseEntity<?> delete(@PathVariable(name ="id") Integer id) {
+    public ResponseEntity<?> delete(@PathVariable(name ="id") Long id) {
         if(!studentService.existById(id)){
             return ResponseEntity.notFound().build();
         }
@@ -72,7 +72,7 @@ public class StudentControllerImpl implements IStudentController {
 
     @GetMapping("/list/{id}")
     @Override
-    public Optional<DtoStudent> findById(@PathVariable(name="id") Integer id) {
+    public Optional<DtoStudent> findById(@PathVariable(name="id") Long id) {
         return studentService.findById(id);
     }
 }

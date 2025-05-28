@@ -2,11 +2,9 @@ package com.hediyesilaozyurt.services.impl;
 
 import com.hediyesilaozyurt.dto.DtoStudent;
 import com.hediyesilaozyurt.entities.Student;
-import com.hediyesilaozyurt.entities.StudentCard;
 import com.hediyesilaozyurt.mapper.StudentMapper;
 import com.hediyesilaozyurt.repository.StudentRepository;
 import com.hediyesilaozyurt.services.IStudentService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class IStudentServiceImpl implements IStudentService {
+public class StudentServiceImpl implements IStudentService {
 
     @Autowired
     private StudentRepository studentRepository;
@@ -29,7 +27,7 @@ public class IStudentServiceImpl implements IStudentService {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(Long id) {
         studentRepository.deleteById(id);
     }
 
@@ -41,12 +39,12 @@ public class IStudentServiceImpl implements IStudentService {
     }
 
     @Override
-    public boolean existById(Integer id) {
+    public boolean existById(Long id) {
         return studentRepository.existsById(id);
     }
 
     @Override
-    public DtoStudent update(Integer id,DtoStudent dtoStudentIU) {
+    public DtoStudent update(Long id,DtoStudent dtoStudentIU) {
         Optional<Student> optionalStudent=findEntityById(id);
         if(optionalStudent.isPresent()){
             Student dbStudent=optionalStudent.get();
@@ -61,7 +59,7 @@ public class IStudentServiceImpl implements IStudentService {
     }
 
     @Override
-    public Optional<Student> findEntityById(Integer id) {
+    public Optional<Student> findEntityById(Long id) {
         return studentRepository.findById(id);
     }
 
@@ -83,7 +81,7 @@ public class IStudentServiceImpl implements IStudentService {
     }
 
     @Override
-    public Optional<DtoStudent> findById(Integer id) {
+    public Optional<DtoStudent> findById(Long id) {
         return studentRepository.findById(id)
                 .map(studentMapper::toDto);
         //student -> studentMapper.toDto(student)

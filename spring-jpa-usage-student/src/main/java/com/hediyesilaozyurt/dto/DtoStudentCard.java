@@ -19,4 +19,5 @@ public class DtoStudentCard {
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date issueDate;
+
 }

@@ -1,5 +1,7 @@
 package com.hediyesilaozyurt.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,8 +14,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class DtoStudent {
 
-
-    private Integer id;
+    private Long id;
 
     @Size(min = 11,max = 11)
     @Pattern(regexp = "\\d{11}",message = "tckn must contain only digits")

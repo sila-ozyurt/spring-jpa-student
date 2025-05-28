@@ -30,7 +30,20 @@ public class StudentMapper {
     }
 
     public Student toEntity(DtoStudent dto){
-       return dto!=null ? modelMapper.map(dto, Student.class):null;
+      // if you use one side relation between student and studentCard u can use the code below, the other lines instead.
+     //  return dto!=null ? modelMapper.map(dto, Student.class):null;
+
+
+     // if you use 2 sided relation between student and student card u have to use the lines below
+        if (dto == null) return null;
+
+        Student student = modelMapper.map(dto, Student.class);
+
+        if (student.getStudentCard() != null) {
+            student.getStudentCard().setStudent(student);
+        }
+
+        return student;
     }
 
     public DtoStudent toDto(Student entity){

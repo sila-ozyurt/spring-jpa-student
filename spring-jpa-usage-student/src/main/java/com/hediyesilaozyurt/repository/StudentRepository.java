@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface StudentRepository extends JpaRepository<Student, Integer> {
+public interface StudentRepository extends JpaRepository<Student,Long> {
 
     @Query(value="select * from student.student order by birth_of_date asc",nativeQuery = true)
     List<Student> sortByBirthDate();

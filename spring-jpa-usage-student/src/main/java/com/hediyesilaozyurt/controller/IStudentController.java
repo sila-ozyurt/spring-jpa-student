@@ -13,11 +13,11 @@ public interface IStudentController {
 
     public List<DtoStudent> list();
 
-    public Optional<DtoStudent> findById(Integer id);
+    public Optional<DtoStudent> findById(Long id);
 
-    public ResponseEntity<?> delete(Integer id);
+    public ResponseEntity<?> delete(Long id);
 
-    public DtoStudent update(Integer id,DtoStudent student);
+    public DtoStudent update(Long id,DtoStudent student);
 
     public List<DtoStudent> sortByBirthDate();
 
