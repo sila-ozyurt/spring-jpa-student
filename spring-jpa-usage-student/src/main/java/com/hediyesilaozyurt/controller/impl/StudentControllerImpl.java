@@ -25,6 +25,12 @@ public class StudentControllerImpl implements IStudentController {
         return studentService.searchByFirstName(name);
     }
 
+    @Override
+    @GetMapping(path="/list-students-taking-this-course/{courseId}")
+    public List<DtoStudent> studentsTakingASpecificCourse(@PathVariable(name="courseId") Long courseId) {
+        return studentService.studentsTakingASpecificCourse(courseId);
+    }
+
     @GetMapping(path="/list")
     @Override
     public List<DtoStudent> list() {
@@ -62,6 +68,12 @@ public class StudentControllerImpl implements IStudentController {
     @Override
     public Integer getNumberOfTotalStudents() {
         return studentService.getNumberOfTotalStudents();
+    }
+
+    @Override
+    @GetMapping(path="/get-student/{card_id}")
+    public DtoStudent getStudentByCardId(@PathVariable(name="card_id") Long cardId) {
+        return studentService.getStudentByCardId(cardId);
     }
 
     @PostMapping(path = "/save")

@@ -25,9 +25,6 @@ public class StudentCard {
     @Column(name = "issue_date",nullable = false)
     private Date issueDate;
 
-    @OneToOne(mappedBy = "studentCard")
-    private Student student;
-
 
 
 

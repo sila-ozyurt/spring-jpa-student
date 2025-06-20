@@ -2,12 +2,14 @@ package com.hediyesilaozyurt.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hediyesilaozyurt.entities.MainDepartment;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -37,4 +39,8 @@ public class DtoStudent {
     private String email;
 
     private DtoStudentCard studentCard;
+
+    private DtoMainDepartment mainDepartment;
+
+    private List<DtoCourses> courses;
 }

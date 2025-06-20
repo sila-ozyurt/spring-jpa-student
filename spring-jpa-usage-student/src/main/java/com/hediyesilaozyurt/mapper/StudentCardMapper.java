@@ -1,12 +1,13 @@
 package com.hediyesilaozyurt.mapper;
 
-import com.hediyesilaozyurt.dto.DtoStudent;
+import com.hediyesilaozyurt.dto.DtoStudentCard;
 import com.hediyesilaozyurt.entities.StudentCard;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class StudentCardMapper {
@@ -14,12 +15,17 @@ public class StudentCardMapper {
     @Autowired
     private ModelMapper modelMapper;
 
-    @Autowired
-    private StudentMapper studentMapper;
+    public StudentCard toEntity(DtoStudentCard dtoStudentCard){
+        return dtoStudentCard!=null ? modelMapper.map(dtoStudentCard, StudentCard.class):null;
+    }
 
-    //a function to translate from student card to dto Student
-    public Optional<DtoStudent> studentCardToDtoStudent(Optional<StudentCard> studentCard){
-        return studentCard.map(StudentCard::getStudent)
-                .map(studentMapper::toDto);
+    public DtoStudentCard toDto(StudentCard studentCard){
+        return studentCard!=null ? modelMapper.map(studentCard, DtoStudentCard.class):null;
+    }
+
+    public List<DtoStudentCard> toDtoList(List<StudentCard> studentCards){
+        return studentCards.stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
     }
 }

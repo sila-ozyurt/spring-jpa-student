@@ -15,10 +15,10 @@ import java.util.Optional;
 public class StudentServiceImpl implements IStudentService {
 
     @Autowired
-    private StudentRepository studentRepository;
+    private StudentMapper studentMapper;
 
     @Autowired
-    private StudentMapper studentMapper;
+    private StudentRepository studentRepository;
 
     @Override
     public List<DtoStudent> list() {
@@ -41,6 +41,13 @@ public class StudentServiceImpl implements IStudentService {
     @Override
     public boolean existById(Long id) {
         return studentRepository.existsById(id);
+    }
+
+    @Override
+    public List<DtoStudent> studentsTakingASpecificCourse(Long courseId) {
+        List<Student> students=studentRepository.findStudentByCourseId(courseId);
+        List<DtoStudent> dtoStudents=studentMapper.toDtoList(students);
+        return dtoStudents;
     }
 
     @Override
@@ -85,6 +92,12 @@ public class StudentServiceImpl implements IStudentService {
         return studentRepository.findById(id)
                 .map(studentMapper::toDto);
         //student -> studentMapper.toDto(student)
+    }
+
+    @Override
+    public DtoStudent getStudentByCardId(Long cardId) {
+        Optional<Student> optionalStudent= studentRepository.getStudentByCardId(cardId);
+        return studentMapper.toDto(optionalStudent.get());
     }
 
 }

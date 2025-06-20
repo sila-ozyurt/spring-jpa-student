@@ -3,6 +3,7 @@ package com.hediyesilaozyurt.entities;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Past;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,37 +20,38 @@ public class Student {
 
     @Id
     @Column(name="id")
-    @JsonProperty("id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name="tckn",nullable = false,unique = true)
-    @JsonProperty("tckn")
     private String tckn;
 
-    @JsonProperty("firstName")
     @Column(name="first_name",nullable = false)
     private String firstName;
 
-    @JsonProperty("lastName")
     @Column(name="last_name",nullable = false)
     private String lastName;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @JsonProperty("birthOfDate")
     /*@DateTimeFormat(iso=DateTimeFormat.ISO.DATE)*/
     @Column(name = "birth_of_date",nullable = true)
+    @Past
     private Date birthOfDate;
 
     @Column(unique = true)
-    @JsonProperty("email")
     private String email;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="card_id")
     private StudentCard studentCard;
 
-    @OneToMany
-    private List<Courses> courses;
+    @ManyToOne
+    @JoinColumn(name="main_department_id")
+    private MainDepartment mainDepartment;
 
+    @ManyToMany
+    @JoinTable(name="student_courses"
+            ,joinColumns =@JoinColumn(name="student_id")
+            ,inverseJoinColumns = @JoinColumn(name="course_id"))
+    private List<Courses> courses;
 }

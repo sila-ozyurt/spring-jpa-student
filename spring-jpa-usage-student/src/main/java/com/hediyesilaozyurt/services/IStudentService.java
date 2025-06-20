@@ -13,6 +13,8 @@ public interface IStudentService {
 
     public Optional<DtoStudent> findById(Long id);
 
+    public DtoStudent getStudentByCardId(Long cardId);
+
     public boolean existById(Long id);
 
     public void delete(Long id);
@@ -26,4 +28,5 @@ public interface IStudentService {
     public Integer getNumberOfTotalStudents();
 
     public List<DtoStudent> searchByFirstName(String name);
+    public List<DtoStudent> studentsTakingASpecificCourse(Long id);
 }

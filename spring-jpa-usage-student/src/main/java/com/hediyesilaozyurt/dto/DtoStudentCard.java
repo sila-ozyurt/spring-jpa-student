@@ -2,6 +2,8 @@ package com.hediyesilaozyurt.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +17,7 @@ public class DtoStudentCard {
 
     private Long id;
 
+    @NotBlank(message = "CardNumber field cannot be blank")
     private String cardNumber;
 
     @JsonFormat(pattern = "yyyy-MM-dd")

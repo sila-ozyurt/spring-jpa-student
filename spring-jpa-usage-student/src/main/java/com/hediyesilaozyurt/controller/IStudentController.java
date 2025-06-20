@@ -19,9 +19,14 @@ public interface IStudentController {
 
     public DtoStudent update(Long id,DtoStudent student);
 
+    public DtoStudent getStudentByCardId(Long cardId);
+
     public List<DtoStudent> sortByBirthDate();
 
     public Integer getNumberOfTotalStudents();
 
     public List<DtoStudent> searchByFirstName(String name);
+
+    public List<DtoStudent> studentsTakingASpecificCourse(Long courseId);
+
 }

@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface StudentRepository extends JpaRepository<Student,Long> {
@@ -19,4 +20,18 @@ public interface StudentRepository extends JpaRepository<Student,Long> {
 
     @Query(value="select *from student.student where lower(first_name) like lower(concat('%',:keyword,'%')) ",nativeQuery = true)
     List<Student> searchByFirstName(@Param(value="keyword") String keyword);
+
+    @Query(value ="select *from student.student s where s.card_id= :cardId" ,nativeQuery = true)
+    Optional<Student> getStudentByCardId(@Param(value="cardId") Long cardId);
+
+    @Query(value="""
+            select s.*
+            from student.student s 
+            join student.student_courses sc  on s.id=sc.student_id
+            join student.courses c on c.id=sc.course_id
+            where c.id=:courseId
+            """,nativeQuery = true)
+    List<Student> findStudentByCourseId(@Param(value="courseId") Long courseId);
+
+
 }
