@@ -1,0 +1,32 @@
+package com.hediyesilaozyurt.mapper;
+
+
+import com.hediyesilaozyurt.dto.DtoMainDepartment;
+import com.hediyesilaozyurt.entities.MainDepartment;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Component
+public class MainDepartmentMapper {
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    public DtoMainDepartment toDto(MainDepartment mainDepartment){
+        return mainDepartment!=null ? modelMapper.map(mainDepartment, DtoMainDepartment.class):null;
+    }
+
+    public MainDepartment toEntity(DtoMainDepartment dtoMainDepartment){
+        return dtoMainDepartment!=null ?modelMapper.map(dtoMainDepartment, MainDepartment.class):null;
+    }
+
+    public List<DtoMainDepartment> toDtoList(List<MainDepartment> mainDepartments){
+        return mainDepartments.stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+    }
+}
