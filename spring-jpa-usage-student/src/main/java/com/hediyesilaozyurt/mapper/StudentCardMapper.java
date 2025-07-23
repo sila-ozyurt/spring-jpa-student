@@ -1,7 +1,7 @@
 package com.hediyesilaozyurt.mapper;
 
-import com.hediyesilaozyurt.dto.DtoStudentCard;
-import com.hediyesilaozyurt.entities.StudentCard;
+import com.hediyesilaozyurt.dto.dto.DtoStudentCard;
+import com.hediyesilaozyurt.entities.entities.StudentCard;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

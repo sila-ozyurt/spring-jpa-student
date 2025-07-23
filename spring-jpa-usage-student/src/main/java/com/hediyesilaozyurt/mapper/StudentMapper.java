@@ -1,9 +1,7 @@
 package com.hediyesilaozyurt.mapper;
 
-import com.hediyesilaozyurt.dto.DtoStudent;
-import com.hediyesilaozyurt.dto.DtoStudentCard;
-import com.hediyesilaozyurt.entities.Student;
-import com.hediyesilaozyurt.entities.StudentCard;
+import com.hediyesilaozyurt.dto.dto.DtoStudent;
+import com.hediyesilaozyurt.entities.entities.Student;
 import jakarta.annotation.PostConstruct;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

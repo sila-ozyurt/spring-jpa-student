@@ -1,8 +1,8 @@
 package com.hediyesilaozyurt.mapper;
 
 
-import com.hediyesilaozyurt.dto.DtoMainDepartment;
-import com.hediyesilaozyurt.entities.MainDepartment;
+import com.hediyesilaozyurt.dto.dto.DtoMainDepartment;
+import com.hediyesilaozyurt.entities.entities.MainDepartment;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

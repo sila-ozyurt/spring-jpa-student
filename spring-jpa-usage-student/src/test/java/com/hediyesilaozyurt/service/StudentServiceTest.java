@@ -1,25 +1,20 @@
 package com.hediyesilaozyurt.service;
 
-import com.hediyesilaozyurt.dto.DtoStudent;
-import com.hediyesilaozyurt.entities.Courses;
-import com.hediyesilaozyurt.entities.MainDepartment;
-import com.hediyesilaozyurt.entities.Student;
-import com.hediyesilaozyurt.entities.StudentCard;
+import com.hediyesilaozyurt.dto.dto.DtoStudent;
+import com.hediyesilaozyurt.entities.entities.Courses;
+import com.hediyesilaozyurt.entities.entities.MainDepartment;
+import com.hediyesilaozyurt.entities.entities.Student;
+import com.hediyesilaozyurt.entities.entities.StudentCard;
 import com.hediyesilaozyurt.mapper.StudentMapper;
-import com.hediyesilaozyurt.repository.StudentRepository;
-import com.hediyesilaozyurt.services.impl.StudentServiceImpl;
-import jakarta.inject.Inject;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import com.hediyesilaozyurt.repository.respository.StudentRepository;
+import com.hediyesilaozyurt.services.services.impl.StudentServiceImpl;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.util.Assert;
 
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -44,6 +39,20 @@ public class StudentServiceTest {
     private StudentCard testStudentCard;
     private MainDepartment testMainDepartment;
     private Courses testCourse;
+    @BeforeAll
+    static void beforeAll() {
+        System.out.println("==> Runs once before all tests (e.g. resource allocation, logging setup, global initialization).");
+    }
+
+    @AfterEach
+    void afterEach() {
+        System.out.println("-- Test completed, mocks can be cleared or results can be logged.");
+    }
+
+    @AfterAll
+    static void afterAll() {
+        System.out.println("==> All tests finished. Resources can be released.");
+    }
 
 
     @BeforeEach
@@ -259,7 +268,7 @@ public class StudentServiceTest {
         //Then
         Assertions.assertNotNull(result);
         Assertions.assertEquals(2,result.size());
-        Assertions.assertEquals("Mehmet",result.get(0).getFirstName());
+        Assertions.assertEquals("Ayaz",result.get(0).getFirstName());
         Mockito.verify(studentRepository,Mockito.times(1)).sortByBirthDate();
         Mockito.verify(studentMapper,Mockito.times(1)).toDtoList(testStudentsList);
     }

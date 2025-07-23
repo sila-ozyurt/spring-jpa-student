@@ -1,12 +1,11 @@
 package com.hediyesilaozyurt.scheduled;
 
-import com.hediyesilaozyurt.repository.StudentRepository;
+import com.hediyesilaozyurt.repository.respository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import java.math.BigInteger;
 import java.util.List;
 
 @Service

@@ -1,11 +1,10 @@
 package com.hediyesilaozyurt.mapper;
 
-import com.hediyesilaozyurt.dto.DtoCourses;
-import com.hediyesilaozyurt.entities.Courses;
+import com.hediyesilaozyurt.dto.dto.DtoCourses;
+import com.hediyesilaozyurt.entities.entities.Courses;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.ui.ModelMap;
 
 import java.util.List;
 import java.util.stream.Collectors;
