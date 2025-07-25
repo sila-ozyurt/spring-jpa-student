@@ -1,5 +1,6 @@
 package com.hediyesilaozyurt.services.authenticationService.impl;
 
+import com.hediyesilaozyurt.dto.authDto.AuthenticationRequest;
 import com.hediyesilaozyurt.dto.authDto.AuthenticationResponse;
 import com.hediyesilaozyurt.dto.authDto.RegisterRequest;
 import com.hediyesilaozyurt.entities.authEntity.Role;
@@ -7,7 +8,12 @@ import com.hediyesilaozyurt.entities.authEntity.UserEntity;
 import com.hediyesilaozyurt.jwt.JwtService;
 import com.hediyesilaozyurt.repository.authRepository.UserRepository;
 import com.hediyesilaozyurt.services.authenticationService.IAuthenticationService;
+import jdk.jfr.Frequency;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,7 +31,7 @@ public class AuthenticationService implements IAuthenticationService{
     private JwtService jwtService;
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private AuthenticationManager authenticationManager;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -59,6 +65,41 @@ public class AuthenticationService implements IAuthenticationService{
                 user.getRole().name(),
                 "registeration is successfull"
         );
+    }
+
+    @Override
+    public AuthenticationResponse authenticate(AuthenticationRequest authRequest) {
+       try {
+           Authentication authentication=authenticationManager.authenticate(
+                   new UsernamePasswordAuthenticationToken(
+                           authRequest.getUsername(),
+                           authRequest.getPassword()
+                   )
+           );
+
+           //get user from the db
+           UserEntity user=userRepository.findbyUserName(authRequest.getUsername())
+                   .orElseThrow(()->new UsernameNotFoundException("user not found"));
+
+           //create token
+           String jwtToken=jwtService.generateToken(user);
+
+           return new AuthenticationResponse(
+                jwtToken,
+                user.getUsername(),
+                user.getRole().name(),
+                "Entrance is successfull"
+           );
+
+
+       } catch (Exception e) {
+           return new AuthenticationResponse(
+                   null,
+                   null,
+                   null,
+                   "invalid username or password "
+           );
+       }
     }
 
 }

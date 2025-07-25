@@ -3,7 +3,7 @@ package com.hediyesilaozyurt.config.securityConfig;
 
 import com.hediyesilaozyurt.jwt.JwtAuthenticationFilter;
 import com.hediyesilaozyurt.repository.authRepository.UserRepository;
-import lombok.RequiredArgsConstructor;
+import com.hediyesilaozyurt.services.authenticationService.impl.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,9 +16,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -53,15 +51,19 @@ public class SecurityConfig{
                         .requestMatchers(HttpMethod.GET,"/rest/api/departments/**").hasAnyRole("ADMIN","STUDENT")
 
                         //FOR THE OTHER REQUESTS AUTHENTICATION IS NEEDED
-                        .anyRequest().authenticated()
-                )
+                        .anyRequest().authenticated())
                 .sessionManagement(session->session
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception{
+        return configuration.getAuthenticationManager();
     }
 
     @Bean
@@ -79,11 +81,12 @@ public class SecurityConfig{
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception{
-        return configuration.getAuthenticationManager();
+    public UserDetailsService userDetailsService(){
+        return new CustomUserDetailsService();
     }
 
-    @Bean
+
+   /* @Bean
     public UserDetailsService userDetailsService(){
         return new UserDetailsService() {
 
@@ -93,5 +96,5 @@ public class SecurityConfig{
                         .orElseThrow(()->new UsernameNotFoundException("user is not found"+username));
             }
         };
-    }
+    }*/
 }
