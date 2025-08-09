@@ -1,6 +1,6 @@
 package com.hediyesilaozyurt.service;
 
-import com.hediyesilaozyurt.dto.dto.DtoStudent;
+import com.hediyesilaozyurt.dto.dto.DtoStudentResponse;
 import com.hediyesilaozyurt.entities.entities.Courses;
 import com.hediyesilaozyurt.entities.entities.MainDepartment;
 import com.hediyesilaozyurt.entities.entities.Student;
@@ -33,9 +33,9 @@ public class StudentServiceTest {
     private StudentMapper studentMapper;
 
     private Student testStudent;
-    private DtoStudent testDtoStudent;
+    private DtoStudentResponse testDtoStudent;
     private List<Student> testStudentsList;
-    private List<DtoStudent> testDtoStudentsList;
+    private List<DtoStudentResponse> testDtoStudentsList;
     private StudentCard testStudentCard;
     private MainDepartment testMainDepartment;
     private Courses testCourse;
@@ -90,7 +90,7 @@ public class StudentServiceTest {
         testStudent.setCourses(Arrays.asList(testCourse));
 
         //DtoStudent test data
-        testDtoStudent=new DtoStudent();
+        testDtoStudent=new DtoStudentResponse();
         testDtoStudent.setId(1L);
         testDtoStudent.setTckn("12234545678");
         testDtoStudent.setFirstName("Ayaz");
@@ -111,7 +111,7 @@ public class StudentServiceTest {
         student2.setCourses(Arrays.asList(testCourse));
 
         //2nd DtoStudent test data
-        DtoStudent dtoStudent2 = new DtoStudent();
+        DtoStudentResponse dtoStudent2 = new DtoStudentResponse();
         dtoStudent2.setId(2L);
         dtoStudent2.setTckn("98765432109");
         dtoStudent2.setFirstName("Mehmet");
@@ -133,7 +133,7 @@ public class StudentServiceTest {
         Mockito.when(studentMapper.toDtoList(testStudentsList)).thenReturn(testDtoStudentsList);
 
         //When
-        List<DtoStudent> result=studentService.list();
+        List<DtoStudentResponse> result=studentService.list();
 
         //Then
         Assertions.assertNotNull(result);
@@ -171,7 +171,7 @@ public class StudentServiceTest {
         Mockito.when(studentMapper.toDto(testStudent)).thenReturn(testDtoStudent);
 
         //When
-        DtoStudent result=studentService.saveStudent(testDtoStudent);
+        DtoStudentResponse result=studentService.saveStudent(testDtoStudent);
 
         //Then
         Assertions.assertNotNull(result);
@@ -205,7 +205,7 @@ public class StudentServiceTest {
         Mockito.when(studentMapper.toDtoList(testStudentsList)).thenReturn(testDtoStudentsList);
 
         //When
-        List<DtoStudent> result=studentService.studentsTakingASpecificCourse(courseId);
+        List<DtoStudentResponse> result=studentService.studentsTakingASpecificCourse(courseId);
 
         //Then
         Assertions.assertNotNull(result);
@@ -218,7 +218,7 @@ public class StudentServiceTest {
     public void updateTest(){
         //Given
         Long studentId=1L;
-        DtoStudent updateDto=new DtoStudent();
+        DtoStudentResponse updateDto=new DtoStudentResponse();
         updateDto.setTckn("11111111111");
         updateDto.setFirstName("Updated Name");
         updateDto.setLastName("Updated LastName");
@@ -231,7 +231,7 @@ public class StudentServiceTest {
         updatedStudent.setLastName("Updated LastName");
         updatedStudent.setEmail("updated@example.com");
 
-        DtoStudent updatedDto = new DtoStudent();
+        DtoStudentResponse updatedDto = new DtoStudentResponse();
         updatedDto.setId(studentId);
         updatedDto.setTckn("11111111111");
         updatedDto.setFirstName("Updated Name");
@@ -244,7 +244,7 @@ public class StudentServiceTest {
         Mockito.when(studentMapper.toDto(updatedStudent)).thenReturn(updatedDto);
 
         //When
-        DtoStudent result=studentService.update(studentId,updateDto);
+        DtoStudentResponse result=studentService.update(studentId,updateDto);
 
         //Then
         Assertions.assertNotNull(result);
@@ -263,7 +263,7 @@ public class StudentServiceTest {
         Mockito.when(studentMapper.toDtoList(testStudentsList)).thenReturn(testDtoStudentsList);
 
         //When
-        List<DtoStudent> result=studentService.sortByBirthDate();
+        List<DtoStudentResponse> result=studentService.sortByBirthDate();
 
         //Then
         Assertions.assertNotNull(result);
@@ -281,7 +281,7 @@ public class StudentServiceTest {
         Mockito.when(studentMapper.toDtoList(Arrays.asList(testStudent))).thenReturn(Arrays.asList(testDtoStudent));
 
         //When
-        List<DtoStudent> result=studentService.searchByFirstName(subStr);
+        List<DtoStudentResponse> result=studentService.searchByFirstName(subStr);
 
         //Then
         Assertions.assertNotNull(result);
@@ -315,7 +315,7 @@ public class StudentServiceTest {
         Mockito.when(studentMapper.toDto(testStudent)).thenReturn(testDtoStudent);
 
         //When
-        Optional<DtoStudent> result=studentService.findById(studentId);
+        Optional<DtoStudentResponse> result=studentService.findById(studentId);
 
         //Then
         Assertions.assertTrue(result.isPresent());
@@ -332,7 +332,7 @@ public class StudentServiceTest {
         Mockito.when(studentMapper.toDto(testStudent)).thenReturn(testDtoStudent);
 
         //When
-        DtoStudent result=studentService.getStudentByCardId(cardId);
+        DtoStudentResponse result=studentService.getStudentByCardId(cardId);
 
         //Then
         Assertions.assertNotNull(result);

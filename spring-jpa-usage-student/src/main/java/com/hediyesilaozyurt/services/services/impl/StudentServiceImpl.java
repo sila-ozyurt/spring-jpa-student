@@ -1,6 +1,7 @@
 package com.hediyesilaozyurt.services.services.impl;
 
-import com.hediyesilaozyurt.dto.dto.DtoStudent;
+import com.hediyesilaozyurt.dto.dto.DtoStudentRequest;
+import com.hediyesilaozyurt.dto.dto.DtoStudentResponse;
 import com.hediyesilaozyurt.entities.entities.Student;
 import com.hediyesilaozyurt.mapper.StudentMapper;
 import com.hediyesilaozyurt.repository.respository.StudentRepository;
@@ -21,7 +22,7 @@ public class StudentServiceImpl implements IStudentService {
     private StudentRepository studentRepository;
 
     @Override
-    public List<DtoStudent> list() {
+    public List<DtoStudentResponse> list() {
        List<Student> students= studentRepository.findAll();
        return studentMapper.toDtoList(students);
     }
@@ -32,7 +33,7 @@ public class StudentServiceImpl implements IStudentService {
     }
 
     @Override
-    public DtoStudent saveStudent(DtoStudent dtoStudentIU) {
+    public DtoStudentResponse saveStudent(DtoStudentRequest dtoStudentIU) {
         Student student=studentMapper.toEntity(dtoStudentIU);
         Student dbStudent=studentRepository.save(student);
         return studentMapper.toDto(dbStudent);
@@ -44,27 +45,28 @@ public class StudentServiceImpl implements IStudentService {
     }
 
     @Override
-    public List<DtoStudent> studentsTakingASpecificCourse(Long courseId) {
+    public List<DtoStudentResponse> studentsTakingASpecificCourse(Long courseId) {
         List<Student> students=studentRepository.findStudentByCourseId(courseId);
-        List<DtoStudent> dtoStudents=studentMapper.toDtoList(students);
+        List<DtoStudentResponse> dtoStudents=studentMapper.toDtoList(students);
         return dtoStudents;
     }
 
     @Override
-    public DtoStudent update(Long id,DtoStudent dtoStudentIU) {
-        Student dbStudent= studentRepository.findById(id).get();
+    public DtoStudentResponse update(Long id, DtoStudentRequest dtoStudentIU) {
+        Student dbStudent= studentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Student not found with id: " + id));
         Student entityToUpdate=studentMapper.updateEntityFromDto(dtoStudentIU,dbStudent);
         return studentMapper.toDto(studentRepository.save(entityToUpdate));
     }
 
     @Override
-    public List<DtoStudent> sortByBirthDate() {
+    public List<DtoStudentResponse> sortByBirthDate() {
         List<Student> students= studentRepository.sortByBirthDate();
         return studentMapper.toDtoList(students);
     }
 
     @Override
-    public List<DtoStudent> searchByFirstName(String name) {
+    public List<DtoStudentResponse> searchByFirstName(String name) {
         List<Student> students=studentRepository.searchByFirstName(name);
         return studentMapper.toDtoList(students);
     }
@@ -75,15 +77,26 @@ public class StudentServiceImpl implements IStudentService {
     }
 
     @Override
-    public Optional<DtoStudent> findById(Long id) {
+    public Optional<DtoStudentResponse> findById(Long id) {
         return studentRepository.findById(id)
                 .map(studentMapper::toDto);
     }
 
     @Override
-    public DtoStudent getStudentByCardId(Long cardId) {
+    public Optional<DtoStudentResponse> getStudentByCardId(Long cardId) {
         Optional<Student> optionalStudent= studentRepository.getStudentByCardId(cardId);
-        return studentMapper.toDto(optionalStudent.get());
+        return optionalStudent.map(student -> studentMapper.toDto(student));
     }
 
+    @Override
+    public Optional<DtoStudentResponse> findByUsername(String username) {
+        Optional<Student> optionalStudent=studentRepository.findByUsername(username);
+        return optionalStudent.map(student->studentMapper.toDto(student));
+    }
+
+    @Override
+    public List<DtoStudentResponse> getStudentsByDepartment(Long id) {
+        List<Student> students=studentRepository.getStudentsByDepartment(id);
+        return studentMapper.toDtoList(students);
+    }
 }

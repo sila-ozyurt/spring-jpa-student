@@ -38,13 +38,12 @@ public class SecurityConfig{
                 .authorizeHttpRequests(request->request
                         // Public endpoints
                         .requestMatchers("/rest/api/auth/**").permitAll()
-                        .requestMatchers("/rest/api/public/**").permitAll()
-
-                        // Admin endpoints
-                        .requestMatchers("/rest/api/admin/**").hasRole("ADMIN")
 
                         // Student endpoints
-                        .requestMatchers("/rest/api/student/**").hasRole("STUDENT")
+                        .requestMatchers("/rest/api/student/**").hasAnyRole("STUDENT","ADMIN")
+
+                        //StudentCard endpoints
+                        .requestMatchers("/rest/api/student-card/**").hasAnyRole("STUDENT","ADMIN")
 
                         //Common endpoints
                         .requestMatchers(HttpMethod.GET,"/rest/api/courses/**").hasAnyRole("ADMIN","STUDENT")

@@ -37,4 +37,17 @@ public class MainDepartmentServiceImpl implements IMainDepartmentService {
     public Optional<DtoMainDepartment> findById(Long id) {
         return mainDepartmentRepository.findById(id).map(mainDepartmentMapper::toDto);
     }
+
+    @Override
+    public DtoMainDepartment update(Long id, DtoMainDepartment dtoMainDepartment) {
+       MainDepartment dbMainDepartment=mainDepartmentRepository.findById(id).get();
+       MainDepartment entityToUpdate=mainDepartmentMapper.updateEntityFromDto(dtoMainDepartment,dbMainDepartment);
+       return mainDepartmentMapper.toDto(mainDepartmentRepository.save(entityToUpdate));
+    }
+
+    @Override
+    public Integer getStudentCountByDepartment(Long id) {
+        return mainDepartmentRepository.getStudentCountByDepartment(id);
+    }
+
 }

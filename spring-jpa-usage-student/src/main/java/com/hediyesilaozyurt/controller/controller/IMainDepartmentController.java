@@ -13,4 +13,6 @@ public interface IMainDepartmentController {
     public RootEntity<Optional<DtoMainDepartment>> findById(Long id);
 
     public RootEntity<List<DtoMainDepartment>> list();
+
+    public RootEntity<DtoMainDepartment> update(Long id,DtoMainDepartment mainDepartment);
 }

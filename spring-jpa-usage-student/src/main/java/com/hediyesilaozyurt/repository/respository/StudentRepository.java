@@ -41,5 +41,20 @@ public interface StudentRepository extends JpaRepository<Student,Long> {
             """,nativeQuery = true)
     List<Object[]> getStudentCountPerDepartment();
 
+    @Query(value="""
+            select *  
+            from student.student s
+            join student.users u
+            on s.user_id=u.id
+            where u.username= :username
+            """,nativeQuery = true)
+    Optional<Student> findByUsername(@Param(value = "username") String username);
+
+    @Query(value = """
+            select *
+            from student.student s
+            where s.main_department_id= :id
+            """,nativeQuery = true)
+    List<Student> getStudentsByDepartment(Long id);
 
 }

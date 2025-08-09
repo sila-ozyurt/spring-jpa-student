@@ -37,4 +37,14 @@ public class StudentCardServiceImpl implements IStudentCardService {
         List<StudentCard> studentCards=studentCardRepository.findAll();
         return studentCardMapper.toDtoList(studentCards);
     }
+
+    @Override
+    public boolean existById(Long id) {
+        return studentCardRepository.existsById(id);
+    }
+
+    @Override
+    public void delete(Long id) {
+        studentCardRepository.deleteById(id);
+    }
 }

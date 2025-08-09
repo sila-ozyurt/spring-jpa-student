@@ -29,4 +29,14 @@ public class MainDepartmentMapper {
                 .map(this::toDto)
                 .collect(Collectors.toList());
     }
+
+    public MainDepartment updateEntityFromDto(DtoMainDepartment dto,MainDepartment entity){
+        if(dto==null || entity==null){
+            return null;
+        }
+
+        //copy fields in dto into entity
+        modelMapper.map(dto,entity);
+        return entity;
+    }
 }

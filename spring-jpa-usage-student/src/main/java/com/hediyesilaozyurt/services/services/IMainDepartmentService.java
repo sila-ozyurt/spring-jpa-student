@@ -12,4 +12,8 @@ public interface IMainDepartmentService {
     public List<DtoMainDepartment> list();
 
     public Optional<DtoMainDepartment> findById(Long id);
+
+    public DtoMainDepartment update(Long id, DtoMainDepartment dtoMainDepartment);
+
+    public Integer getStudentCountByDepartment(Long id);
 }

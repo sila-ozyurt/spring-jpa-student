@@ -12,7 +12,7 @@ public class MapperConfig {
     public ModelMapper modelMapper(){
         ModelMapper mapper=new ModelMapper();
         mapper.getConfiguration()
-                .setMatchingStrategy(MatchingStrategies.LOOSE)
+                .setMatchingStrategy(MatchingStrategies.STRICT)
                 .setFieldMatchingEnabled(true)
                 .setFieldAccessLevel(org.modelmapper.config.Configuration.AccessLevel.PRIVATE)
                 .setDeepCopyEnabled(true)

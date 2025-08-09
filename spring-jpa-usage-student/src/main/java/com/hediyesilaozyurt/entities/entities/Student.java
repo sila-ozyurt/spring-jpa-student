@@ -42,11 +42,11 @@ public class Student {
     private String email;
 
     @OneToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name="card_id")
+    @JoinColumn(name="card_id",nullable = false)
     private StudentCard studentCard;
 
     @ManyToOne
-    @JoinColumn(name="main_department_id")
+    @JoinColumn(name="main_department_id",nullable = false)
     private MainDepartment mainDepartment;
 
     @ManyToMany
@@ -56,6 +56,6 @@ public class Student {
     private List<Courses> courses;
 
     @OneToOne(cascade = CascadeType.MERGE,fetch =FetchType.LAZY)
-    @JoinColumn(name="user_id",unique = true)
+    @JoinColumn(name="user_id",unique = true,nullable = false)
     private UserEntity user;
 }

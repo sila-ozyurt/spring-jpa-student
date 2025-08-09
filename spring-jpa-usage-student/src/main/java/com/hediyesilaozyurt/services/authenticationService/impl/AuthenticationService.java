@@ -56,6 +56,10 @@ public class AuthenticationService implements IAuthenticationService{
         user.setIsActive(true);
 
         userRepository.save(user);
+/*
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("email", user.getEmail());
+        String jwtToken=jwtService.generateToken(extraClaims, user);*/
 
         String jwtToken=jwtService.generateToken(user);
 

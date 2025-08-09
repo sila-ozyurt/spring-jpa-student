@@ -1,11 +1,13 @@
 package com.hediyesilaozyurt.jwt;
 
+import com.hediyesilaozyurt.entities.authEntity.UserEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -39,7 +41,6 @@ public class JwtService {
     public <T> T extractClaim(String token,Function<Claims,T> claimsResolver){
         final Claims claims=extractAllClaims(token);
         return claimsResolver.apply(claims);
-
     }
 
     //control if this token belongs to user and unexpired
@@ -51,13 +52,19 @@ public class JwtService {
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-    //overload method without extra claims
     public String generateToken(UserDetails userDetails){
-        return generateToken(new HashMap<>(),userDetails);
-    }
+        Map<String,Object> extraClaims=new HashMap<>();
 
-    //overload method
-    public String generateToken(Map<String,Object> extraClaims,UserDetails userDetails){
+        if(userDetails instanceof UserEntity){
+            UserEntity user=(UserEntity) userDetails;
+            extraClaims.put("role",user.getRole().name());
+            extraClaims.put("id",user.getId());
+            extraClaims.put("email",user.getEmail());
+            extraClaims.put("isActive",user.getIsActive());
+        }
+        else{
+            extraClaims.put("role",userDetails.getAuthorities().iterator().next().getAuthority());
+        }
         return buildToken(extraClaims,userDetails,JWT_EXPIRATION);
     }
 

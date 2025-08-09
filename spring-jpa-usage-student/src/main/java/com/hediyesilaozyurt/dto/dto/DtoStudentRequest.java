@@ -1,9 +1,11 @@
 package com.hediyesilaozyurt.dto.dto;
 
+import com.hediyesilaozyurt.dto.authDto.DtoUser;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.Date;
 import java.util.List;
@@ -11,7 +13,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DtoStudent {
+public class DtoStudentRequest {
 
     private Long id;
 
@@ -27,7 +29,7 @@ public class DtoStudent {
     @NotBlank(message = "lastname field cannot be null empty or blank")
     private String lastName;
 
-    @NotNull(message = "cannot be null")
+    @NotNull(message = "birthdate cannot be null")
     @Past
     private Date birthOfDate;
 
@@ -35,9 +37,18 @@ public class DtoStudent {
     @Email(message = "invalid email format")
     private String email;
 
-    private DtoStudentCard studentCard;
+    @NotNull(message = "Student card ID cannot be null")
+    @Positive(message = "Student card ID must be positive")
+    private Long studentCardId;
 
-    private DtoMainDepartment mainDepartment;
+    @NotNull(message = "Department ID cannot be null")
+    @Positive(message = "Department ID must be positive")
+    private Long mainDepartmentId;
 
-    private List<DtoCourses> courses;
+    @NotNull(message = "Course list cannot be null")
+    private List<@Positive(message = "Course ID must be positive")Long> courseIds;
+
+    @NotNull(message = "User ID cannot be null")
+    @Positive(message = "User ID must be positive")
+    private Long userId;
 }

@@ -1,32 +1,37 @@
 package com.hediyesilaozyurt.controller.controller;
 
-import com.hediyesilaozyurt.dto.dto.DtoStudent;
+import com.hediyesilaozyurt.dto.dto.DtoStudentRequest;
+import com.hediyesilaozyurt.dto.dto.DtoStudentResponse;
 import com.hediyesilaozyurt.entities.soleResponseType.RootEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface IStudentController {
 
-    public RootEntity<DtoStudent> saveStudent(DtoStudent student);
+    public RootEntity<DtoStudentResponse> saveStudent(DtoStudentRequest student);
 
-    public RootEntity<List<DtoStudent>> list();
+    public RootEntity<List<DtoStudentResponse>> list();
 
-    public RootEntity<Optional<DtoStudent>> findById(Long id);
+    public RootEntity<DtoStudentResponse> findById(Long id);
 
     public ResponseEntity<?> delete(Long id);
 
-    public RootEntity<DtoStudent> update(Long id,DtoStudent student);
+    public RootEntity<DtoStudentResponse> update(Long id, DtoStudentRequest student);
 
-    public RootEntity<DtoStudent> getStudentByCardId(Long cardId);
+    public RootEntity<DtoStudentResponse> getStudentByCardId(Long cardId);
 
-    public RootEntity<List<DtoStudent>> sortByBirthDate();
+    public RootEntity<List<DtoStudentResponse>> sortByBirthDate();
 
     public RootEntity<Integer> getNumberOfTotalStudents();
 
-    public RootEntity<List<DtoStudent>> searchByFirstName(String name);
+    public RootEntity<List<DtoStudentResponse>> searchByFirstName(String name);
 
-    public RootEntity<List<DtoStudent>> studentsTakingASpecificCourse(Long courseId);
+    public RootEntity<List<DtoStudentResponse>> studentsTakingASpecificCourse(Long courseId);
+
+    public RootEntity<DtoStudentResponse> getStudentProfile(Authentication authentication);
+
+    public RootEntity<List<DtoStudentResponse>> getStudentsByDepartment(Long id);
 
 }

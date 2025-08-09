@@ -2,6 +2,8 @@ package com.hediyesilaozyurt.controller.controller;
 
 import com.hediyesilaozyurt.dto.dto.DtoStudentCard;
 import com.hediyesilaozyurt.entities.soleResponseType.RootEntity;
+import org.apache.coyote.Response;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,4 +16,6 @@ public interface IStudentCardController {
     public RootEntity<Optional<DtoStudentCard>> findById(Long id);
 
     public RootEntity<List<DtoStudentCard>> list();
+
+    public ResponseEntity<?> delete(Long id);
 }

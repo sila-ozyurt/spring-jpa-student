@@ -12,4 +12,8 @@ public interface IStudentCardService {
     public Optional<DtoStudentCard> findById(Long id);
 
     public List<DtoStudentCard> list();
+
+    public boolean existById(Long id);
+
+    public void delete(Long id);
 }
