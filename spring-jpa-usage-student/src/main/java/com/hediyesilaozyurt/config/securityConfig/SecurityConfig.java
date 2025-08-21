@@ -1,9 +1,10 @@
 package com.hediyesilaozyurt.config.securityConfig;
 
 
+import com.hediyesilaozyurt.jwt.AuthEntryPoint;
 import com.hediyesilaozyurt.jwt.JwtAuthenticationFilter;
 import com.hediyesilaozyurt.repository.authRepository.UserRepository;
-import com.hediyesilaozyurt.services.authenticationService.impl.CustomUserDetailsService;
+import com.hediyesilaozyurt.services.authenticationService.impl.CustomUserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,11 +32,23 @@ public class SecurityConfig{
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private AuthEntryPoint authEntryPoint;
+
+    public static final String[] SWAGGER_PATHS={
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/swagger-ui.html"
+    };
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception{
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request->request
+                        //Swagger
+                        .requestMatchers(SWAGGER_PATHS).permitAll()
+
                         // Public endpoints
                         .requestMatchers("/rest/api/auth/**").permitAll()
 
@@ -51,8 +64,12 @@ public class SecurityConfig{
 
                         //FOR THE OTHER REQUESTS AUTHENTICATION IS NEEDED
                         .anyRequest().authenticated())
+                .exceptionHandling(ex->ex
+                        .authenticationEntryPoint(authEntryPoint)
+                )
                 .sessionManagement(session->session
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
@@ -81,7 +98,7 @@ public class SecurityConfig{
 
     @Bean
     public UserDetailsService userDetailsService(){
-        return new CustomUserDetailsService();
+        return new CustomUserDetailsServiceImpl();
     }
 
 

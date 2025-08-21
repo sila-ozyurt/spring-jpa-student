@@ -12,10 +12,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @ComponentScan(basePackages = {"com.hediyesilaozyurt"})
 @EntityScan(basePackages = {"com.hediyesilaozyurt"})
 @EnableJpaRepositories(basePackages = {"com.hediyesilaozyurt"})
-@SpringBootApplication
 //@PropertySource(value = "classpath:app.properties")
 @EnableConfigurationProperties(value= ServerConfig.class)
 @EnableScheduling
+@SpringBootApplication
 public class SpringJpaUsageEmployeeApplication {
 
 	public static void main(String[] args) {

@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface ICoursesService {
 
+    //CRUD operations
     public DtoCourses save(DtoCourses course);
-
     public List<DtoCourses> list();
 
 }

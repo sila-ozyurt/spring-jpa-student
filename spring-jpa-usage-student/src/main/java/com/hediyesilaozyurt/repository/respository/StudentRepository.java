@@ -1,6 +1,8 @@
 package com.hediyesilaozyurt.repository.respository;
 
 import com.hediyesilaozyurt.entities.entities.Student;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,14 +14,20 @@ import java.util.Optional;
 @Repository
 public interface StudentRepository extends JpaRepository<Student,Long> {
 
-    @Query(value="select * from student.student order by birth_of_date asc",nativeQuery = true)
-    List<Student> sortByBirthDate();
+    Page<Student> findAll(Pageable pageable);
+
+    @Query(value="select * from student.student order by birth_of_date asc",
+            countQuery = "select count(*) from student.student",
+            nativeQuery = true)
+    Page<Student> sortByBirthDate(Pageable pageable);
 
     @Query(value = "select count(*) from student.student",nativeQuery = true)
     Integer getNumberOfTotalStudents();
 
-    @Query(value="select *from student.student where lower(first_name) like lower(concat('%',:keyword,'%')) ",nativeQuery = true)
-    List<Student> searchByFirstName(@Param(value="keyword") String keyword);
+    @Query(value="select *from student.student where lower(first_name) like lower(concat('%',:keyword,'%')) ",
+            countQuery = "select count(*) from student.student where lower(first_name) like lower(concat('%',:keyword,'%'))",
+            nativeQuery = true)
+    Page<Student> searchByFirstName(@Param(value="keyword") String keyword,Pageable pageable);
 
     @Query(value ="select *from student.student s where s.card_id= :cardId" ,nativeQuery = true)
     Optional<Student> getStudentByCardId(@Param(value="cardId") Long cardId);
@@ -30,8 +38,15 @@ public interface StudentRepository extends JpaRepository<Student,Long> {
             join student.student_courses sc  on s.id=sc.student_id
             join student.courses c on c.id=sc.course_id
             where c.id=:courseId
-            """,nativeQuery = true)
-    List<Student> findStudentByCourseId(@Param(value="courseId") Long courseId);
+            """,
+            countQuery = """
+                    select count(*)
+                    from student.student s
+                    join student.student_courses sc on s.id=sc.student_id
+                    join student.courses c on c.id=sc.course_id
+                    where c.id=:courseId 
+                    """, nativeQuery = true)
+    Page<Student> findStudentByCourseId(@Param(value="courseId") Long courseId,Pageable pageable);
 
     @Query(value="""
             select d.department_name, count(s.id) as student_count
@@ -54,7 +69,13 @@ public interface StudentRepository extends JpaRepository<Student,Long> {
             select *
             from student.student s
             where s.main_department_id= :id
-            """,nativeQuery = true)
-    List<Student> getStudentsByDepartment(Long id);
+            """,
+            countQuery = """
+            select count(*) 
+            from student.student s 
+            where s.main_department_id= :id
+            """,
+            nativeQuery = true)
+    Page<Student> getStudentsByDepartment(@Param(value = "id") Long id,Pageable pageable);
 
 }

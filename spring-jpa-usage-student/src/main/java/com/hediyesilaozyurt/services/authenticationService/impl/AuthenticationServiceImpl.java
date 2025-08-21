@@ -3,26 +3,24 @@ package com.hediyesilaozyurt.services.authenticationService.impl;
 import com.hediyesilaozyurt.dto.authDto.AuthenticationRequest;
 import com.hediyesilaozyurt.dto.authDto.AuthenticationResponse;
 import com.hediyesilaozyurt.dto.authDto.RegisterRequest;
+import com.hediyesilaozyurt.entities.authEntity.RefreshToken;
 import com.hediyesilaozyurt.entities.authEntity.Role;
 import com.hediyesilaozyurt.entities.authEntity.UserEntity;
 import com.hediyesilaozyurt.jwt.JwtService;
+import com.hediyesilaozyurt.repository.authRepository.RefreshTokenRepository;
 import com.hediyesilaozyurt.repository.authRepository.UserRepository;
 import com.hediyesilaozyurt.services.authenticationService.IAuthenticationService;
-import jdk.jfr.Frequency;
+import com.hediyesilaozyurt.services.authenticationService.IRefreshTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AuthenticationService implements IAuthenticationService{
+public class AuthenticationServiceImpl implements IAuthenticationService{
 
     @Autowired
     private UserRepository userRepository;
@@ -36,16 +34,19 @@ public class AuthenticationService implements IAuthenticationService{
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    @Autowired
+    private IRefreshTokenService refreshTokenService;
+
     @Override
     public AuthenticationResponse register(RegisterRequest request){
         //username control
         if(userRepository.existByUsername(request.getUsername())){
-            return new AuthenticationResponse(null,null,null,"username has taken before");
+            return new AuthenticationResponse(null,null,null,null,null,"username has taken before");
         }
 
         //email control
         if(userRepository.existByEmail(request.getEmail())){
-            return new AuthenticationResponse(null,null,null,"email has taken before");
+            return new AuthenticationResponse(null,null,null,null,null,"email has taken before");
         }
 
         UserEntity user=new UserEntity();
@@ -63,8 +64,12 @@ public class AuthenticationService implements IAuthenticationService{
 
         String jwtToken=jwtService.generateToken(user);
 
+        RefreshToken refreshToken=refreshTokenService.createRefreshToken(user.getId());
+
         return new AuthenticationResponse(
                 jwtToken,
+                refreshToken.getRefreshToken(),
+                "Bearer",
                 user.getUsername(),
                 user.getRole().name(),
                 "registeration is successfull"
@@ -86,18 +91,23 @@ public class AuthenticationService implements IAuthenticationService{
                    .orElseThrow(()->new UsernameNotFoundException("user not found"));
 
            //create token
-           String jwtToken=jwtService.generateToken(user);
+           String accessToken=jwtService.generateToken(user);
+           RefreshToken refreshToken=refreshTokenService.createRefreshToken(user.getId());
 
            return new AuthenticationResponse(
-                jwtToken,
-                user.getUsername(),
-                user.getRole().name(),
-                "Entrance is successfull"
+                   accessToken,
+                   refreshToken.getRefreshToken(),
+                   "Bearer",
+                   user.getUsername(),
+                   user.getRole().name(),
+                   "Entrance is successfull"
            );
 
 
        } catch (Exception e) {
            return new AuthenticationResponse(
+                   null,
+                   null,
                    null,
                    null,
                    null,

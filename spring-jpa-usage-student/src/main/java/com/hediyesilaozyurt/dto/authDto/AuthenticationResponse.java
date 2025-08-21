@@ -10,15 +10,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AuthenticationResponse {
 
-    @NotBlank
-    private String token;
+    private String accessToken;
 
-    @NotBlank
+    private String refreshToken;
+
+    private String tokenType="Bearer";
+
     private String username;
 
-    @NotBlank
     private String role;
 
-    @NotBlank
     private String message;
 }

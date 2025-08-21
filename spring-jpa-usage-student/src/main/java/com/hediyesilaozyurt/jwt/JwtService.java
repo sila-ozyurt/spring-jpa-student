@@ -23,17 +23,15 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-
-    @Value("${jwt.secret:awRbp7XaHLRFsiPsUWbx0WvZEJfYP5+JDOAdNkj0m44=}")
+    @Value("${jwt.secret}")
     private String SECRET_KEY;
 
-    //24 hours default
-    @Value("${jwt.expiration:86400000}")
+    //2 hours default
+    @Value("${jwt.expiration}")
     private Long JWT_EXPIRATION;
 
     //extract username from token
     public String extractUsername(String token){
-
         return extractClaim(token,Claims::getSubject);
     }
 

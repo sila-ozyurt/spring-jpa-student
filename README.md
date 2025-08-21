@@ -1,5 +1,8 @@
 # spring-jpa-student
 
+
+THIS README IS NOT UP-TO-DATE, IT WILL BE UPDATED SOON
+
 ## Contributors
 - Sıla Özyurt (https://github.com/sila-ozyurt)
 

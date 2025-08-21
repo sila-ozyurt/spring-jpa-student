@@ -7,13 +7,10 @@ import java.util.Optional;
 
 public interface IStudentCardService {
 
+    //CRUD operations
     public DtoStudentCard save(DtoStudentCard studentCard);
-
     public Optional<DtoStudentCard> findById(Long id);
-
     public List<DtoStudentCard> list();
-
     public boolean existById(Long id);
-
     public void delete(Long id);
 }

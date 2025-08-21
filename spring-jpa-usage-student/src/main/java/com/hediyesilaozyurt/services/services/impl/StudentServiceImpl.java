@@ -7,7 +7,10 @@ import com.hediyesilaozyurt.mapper.StudentMapper;
 import com.hediyesilaozyurt.repository.respository.StudentRepository;
 import com.hediyesilaozyurt.services.services.IStudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,17 +25,19 @@ public class StudentServiceImpl implements IStudentService {
     private StudentRepository studentRepository;
 
     @Override
-    public List<DtoStudentResponse> list() {
-       List<Student> students= studentRepository.findAll();
+    public List<DtoStudentResponse> findAll(Pageable pageable) {
+       Page<Student> students= studentRepository.findAll(pageable);
        return studentMapper.toDtoList(students);
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         studentRepository.deleteById(id);
     }
 
     @Override
+    @Transactional
     public DtoStudentResponse saveStudent(DtoStudentRequest dtoStudentIU) {
         Student student=studentMapper.toEntity(dtoStudentIU);
         Student dbStudent=studentRepository.save(student);
@@ -45,13 +50,14 @@ public class StudentServiceImpl implements IStudentService {
     }
 
     @Override
-    public List<DtoStudentResponse> studentsTakingASpecificCourse(Long courseId) {
-        List<Student> students=studentRepository.findStudentByCourseId(courseId);
-        List<DtoStudentResponse> dtoStudents=studentMapper.toDtoList(students);
+    public Page<DtoStudentResponse> findStudentByCourseId(Long courseId,Pageable pageable) {
+        Page<Student> students=studentRepository.findStudentByCourseId(courseId,pageable);
+        Page<DtoStudentResponse> dtoStudents=studentMapper.toDtoList(students);
         return dtoStudents;
     }
 
     @Override
+    @Transactional
     public DtoStudentResponse update(Long id, DtoStudentRequest dtoStudentIU) {
         Student dbStudent= studentRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Student not found with id: " + id));
@@ -60,14 +66,14 @@ public class StudentServiceImpl implements IStudentService {
     }
 
     @Override
-    public List<DtoStudentResponse> sortByBirthDate() {
-        List<Student> students= studentRepository.sortByBirthDate();
+    public Page<DtoStudentResponse> sortByBirthDate(Pageable pageable) {
+        Page<Student> students= studentRepository.sortByBirthDate(pageable);
         return studentMapper.toDtoList(students);
     }
 
     @Override
-    public List<DtoStudentResponse> searchByFirstName(String name) {
-        List<Student> students=studentRepository.searchByFirstName(name);
+    public Page<DtoStudentResponse> searchByFirstName(String name,Pageable pageable) {
+        Page<Student> students=studentRepository.searchByFirstName(name,pageable);
         return studentMapper.toDtoList(students);
     }
 
@@ -95,8 +101,8 @@ public class StudentServiceImpl implements IStudentService {
     }
 
     @Override
-    public List<DtoStudentResponse> getStudentsByDepartment(Long id) {
-        List<Student> students=studentRepository.getStudentsByDepartment(id);
+    public Page<DtoStudentResponse> getStudentsByDepartment(Long id,Pageable pageable) {
+        Page<Student> students=studentRepository.getStudentsByDepartment(id,pageable);
         return studentMapper.toDtoList(students);
     }
 }
