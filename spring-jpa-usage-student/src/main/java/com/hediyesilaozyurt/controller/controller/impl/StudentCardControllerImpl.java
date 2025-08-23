@@ -2,10 +2,13 @@ package com.hediyesilaozyurt.controller.controller.impl;
 
 import com.hediyesilaozyurt.controller.controller.IStudentCardController;
 import com.hediyesilaozyurt.dto.dto.DtoStudentCard;
+import com.hediyesilaozyurt.dto.utils.RestPageableRequest;
 import com.hediyesilaozyurt.entities.soleResponseType.RootEntity;
 import com.hediyesilaozyurt.services.services.IStudentCardService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -24,15 +27,12 @@ public class StudentCardControllerImpl extends RestBaseController implements ISt
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
-    public RootEntity<List<DtoStudentCard>> list() {
-        List<DtoStudentCard> dtoStudentCards=studentCardService.list();
+    @GetMapping("/list")
+    public RootEntity<Page<DtoStudentCard>> findAll(@ModelAttribute RestPageableRequest pageableRequest) {
+        Pageable pageable=toPageAble(pageableRequest);
+        Page<DtoStudentCard> dtoStudentCards=studentCardService.findAll(pageable);
 
-        if(dtoStudentCards!=null){
-            return ok(dtoStudentCards);
-        }
-        else{
-            return error(dtoStudentCards);
-        }
+        return createResponse(dtoStudentCards);
     }
 
     @Override
@@ -41,12 +41,7 @@ public class StudentCardControllerImpl extends RestBaseController implements ISt
     public RootEntity<Optional<DtoStudentCard>> findById(@PathVariable(name = "id") Long id) {
         Optional<DtoStudentCard> optionalDtoStudentCard=studentCardService.findById(id);
 
-        if(optionalDtoStudentCard.isPresent()){
-            return ok(optionalDtoStudentCard);
-        }
-        else{
-            return error(optionalDtoStudentCard);
-        }
+        return createResponse(optionalDtoStudentCard);
     }
 
     @Override
@@ -55,12 +50,7 @@ public class StudentCardControllerImpl extends RestBaseController implements ISt
     public RootEntity<DtoStudentCard> save(@RequestBody @Valid DtoStudentCard dtoStudentCard) {
         DtoStudentCard studentCard=studentCardService.save(dtoStudentCard);
 
-        if(studentCard!=null){
-            return ok(studentCard);
-        }
-        else{
-            return error(studentCard);
-        }
+        return createResponse(studentCard);
     }
 
     @DeleteMapping("/delete/{id}")

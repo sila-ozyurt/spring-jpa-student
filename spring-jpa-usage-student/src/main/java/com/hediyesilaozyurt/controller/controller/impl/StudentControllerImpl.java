@@ -5,7 +5,7 @@ import com.hediyesilaozyurt.dto.dto.DtoStudentRequest;
 import com.hediyesilaozyurt.dto.dto.DtoStudentResponse;
 import com.hediyesilaozyurt.entities.soleResponseType.RootEntity;
 import com.hediyesilaozyurt.services.services.IStudentService;
-import com.hediyesilaozyurt.utils.RestPageableRequest;
+import com.hediyesilaozyurt.dto.utils.RestPageableRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,7 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -30,24 +29,11 @@ public class StudentControllerImpl extends RestBaseController implements IStuden
     @PreAuthorize(value="hasAnyRole('ADMIN')")
     @Override
     public RootEntity<Page<DtoStudentResponse>> searchByFirstName(@RequestParam(value="name") String name,
-                                                                  RestPageableRequest pageableRequest) {
-
-        Sort sort=pageableRequest.isAsc()?
-                Sort.by(Sort.Direction.ASC, pageableRequest.getColumnName()):
-                Sort.by(Sort.Direction.DESC, pageableRequest.getColumnName());
-
-        Pageable pageable=PageRequest.of(pageableRequest.getPageNumber(),
-                pageableRequest.getPageSize(),
-                sort);
-
+                                                                  @ModelAttribute RestPageableRequest pageableRequest) {
+        Pageable pageable=toPageAble(pageableRequest);
         Page<DtoStudentResponse> dtoStudents=studentService.searchByFirstName(name,pageable);
 
-        if(dtoStudents!=null){
-            return ok(dtoStudents);
-        }
-        else{
-            return error(dtoStudents);
-        }
+        return createResponse(dtoStudents);
     }
 
     @Override
@@ -61,48 +47,23 @@ public class StudentControllerImpl extends RestBaseController implements IStuden
     @GetMapping(path="/find-student-by-course-id/{courseId}")
     @PreAuthorize(value = "hasAnyRole('STUDENT','ADMIN')")
     public RootEntity<Page<DtoStudentResponse>> findStudentByCourseId(@PathVariable(name="courseId") Long courseId,
-                                                                      RestPageableRequest pageableRequest) {
-        Sort sort=pageableRequest.isAsc()?
-                Sort.by(Sort.Direction.ASC, pageableRequest.getColumnName()):
-                Sort.by(Sort.Direction.DESC, pageableRequest.getColumnName());
+                                                                      @ModelAttribute RestPageableRequest pageableRequest) {
 
-        Pageable pageable=PageRequest.of(pageableRequest.getPageNumber(),
-                pageableRequest.getPageSize(),
-                sort
-        );
-
+        Pageable pageable=toPageAble(pageableRequest);
         Page<DtoStudentResponse> dtoStudents=studentService.findStudentByCourseId(courseId,pageable);
 
-        if(dtoStudents!=null){
-            return ok(dtoStudents);
-        }
-        {
-            return error(dtoStudents);
-        }
+        return createResponse(dtoStudents);
     }
 
     @GetMapping(path="/list")
     @Override
     @PreAuthorize("hasRole('ADMIN')")
-    public RootEntity<Page<DtoStudentResponse>> findAll(RestPageableRequest pageableRequest) {
+    public RootEntity<Page<DtoStudentResponse>> findAll(@ModelAttribute RestPageableRequest pageableRequest) {
 
-        Sort sort=pageableRequest.isAsc()?
-                Sort.by(Sort.Direction.ASC,pageableRequest.getColumnName()):
-                Sort.by(Sort.Direction.DESC, pageableRequest.getColumnName());
-
-        Pageable pageable=PageRequest.of(pageableRequest.getPageNumber(),
-                pageableRequest.getPageSize(),
-                sort);
-
+        Pageable pageable=toPageAble(pageableRequest);
         Page<DtoStudentResponse> dtoStudents=studentService.findAll(pageable);
 
-        if(dtoStudents!=null){
-            return ok(dtoStudents);
-        }
-        else{
-            return error(dtoStudents);
-        }
-
+        return createResponse(dtoStudents);
     }
 
     @PutMapping("/update/{id}")
@@ -112,13 +73,7 @@ public class StudentControllerImpl extends RestBaseController implements IStuden
                                                  @RequestBody @Valid DtoStudentRequest student) {
         DtoStudentResponse dtoStudent=studentService.update(id,student);
 
-        if(dtoStudent!=null){
-            return ok(dtoStudent);
-        }
-        else{
-            return error(dtoStudent);
-        }
-
+        return createResponse(dtoStudent);
     }
 
     @DeleteMapping(path="/delete/{id}")
@@ -140,24 +95,12 @@ public class StudentControllerImpl extends RestBaseController implements IStuden
     @GetMapping(path="/list/orderByDate")
     @PreAuthorize("hasAnyRole('STUDENT', 'ADMIN')")
     @Override
-    public RootEntity<Page<DtoStudentResponse>> sortByBirthDate(RestPageableRequest pageableRequest) {
+    public RootEntity<Page<DtoStudentResponse>> sortByBirthDate(@ModelAttribute RestPageableRequest pageableRequest) {
 
-        Sort sort=pageableRequest.isAsc()?
-                Sort.by(Sort.Direction.ASC,pageableRequest.getColumnName()):
-                Sort.by(Sort.Direction.DESC, pageableRequest.getColumnName());
-
-        Pageable pageable=PageRequest.of(pageableRequest.getPageNumber(),
-                pageableRequest.getPageSize(),
-                sort);
-
+        Pageable pageable=toPageAble(pageableRequest);
         Page<DtoStudentResponse> dtoStudents=studentService.sortByBirthDate(pageable);
 
-        if(dtoStudents!=null){
-            return ok(dtoStudents);
-        }
-        else{
-            return error(dtoStudents);
-        }
+        return createResponse(dtoStudents);
     }
 
     @GetMapping(path="/count")
@@ -166,13 +109,7 @@ public class StudentControllerImpl extends RestBaseController implements IStuden
     public RootEntity<Integer> getNumberOfTotalStudents() {
         Integer totalNumber=studentService.getNumberOfTotalStudents();
 
-        if(totalNumber!=null){
-            return ok(totalNumber);
-        }
-        else{
-            return error(totalNumber);
-        }
-
+        return createResponse(totalNumber);
     }
 
     @Override
@@ -181,11 +118,7 @@ public class StudentControllerImpl extends RestBaseController implements IStuden
     public RootEntity<DtoStudentResponse> getStudentByCardId(@PathVariable(name="card_id") Long cardId) {
         DtoStudentResponse dtoStudent=studentService.getStudentByCardId(cardId).get();
 
-        if(dtoStudent!=null){
-            return ok(dtoStudent);
-        }else{
-            return error(dtoStudent);
-        }
+        return createResponse(dtoStudent);
     }
 
     @PostMapping(path = "/save")
@@ -194,13 +127,7 @@ public class StudentControllerImpl extends RestBaseController implements IStuden
     public RootEntity<DtoStudentResponse> saveStudent(@RequestBody @Valid DtoStudentRequest student) {
         DtoStudentResponse dtoStudent= studentService.saveStudent(student);
 
-        if(dtoStudent!=null){
-            return ok(dtoStudent);
-        }
-        else{
-            return error(dtoStudent);
-        }
-
+        return createResponse(dtoStudent);
     }
 
     @GetMapping("/list/{id}")
@@ -209,12 +136,7 @@ public class StudentControllerImpl extends RestBaseController implements IStuden
     public RootEntity<DtoStudentResponse> findById(@PathVariable(name="id") Long id) {
         DtoStudentResponse dtoStudent=studentService.findById(id).get();
 
-        if(dtoStudent!=null){
-            return ok(dtoStudent);
-        }else{
-            return error(dtoStudent);
-        }
-
+        return createResponse(dtoStudent);
     }
 
 
@@ -222,21 +144,10 @@ public class StudentControllerImpl extends RestBaseController implements IStuden
     @GetMapping("/list/byDepartment/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','STUDENT')")
     public RootEntity<Page<DtoStudentResponse>> getStudentsByDepartment(@PathVariable(name="id") Long id,
-                                                                        RestPageableRequest pageableRequest) {
-        Sort sort=pageableRequest.isAsc()?
-                Sort.by(Sort.Direction.ASC, pageableRequest.getColumnName()):
-                Sort.by(Sort.Direction.DESC,pageableRequest.getColumnName());
-
-        Pageable pageable= PageRequest.of(pageableRequest.getPageNumber(),
-                pageableRequest.getPageSize(),
-                sort);
-
+                                                                        @ModelAttribute RestPageableRequest pageableRequest) {
+        Pageable pageable=toPageAble(pageableRequest);
         Page<DtoStudentResponse> dtoStudents=studentService.getStudentsByDepartment(id,pageable);
 
-        if(dtoStudents!=null){
-            return ok(dtoStudents);
-        }else{
-            return error(dtoStudents);
-        }
+        return createResponse(dtoStudents);
     }
 }

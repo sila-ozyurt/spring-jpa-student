@@ -4,6 +4,7 @@ import com.hediyesilaozyurt.dto.dto.DtoCourses;
 import com.hediyesilaozyurt.entities.entities.Courses;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -23,9 +24,7 @@ public class CoursesMapper {
         return dtoCourse!=null ?modelMapper.map(dtoCourse, Courses.class):null;
     }
 
-    public List<DtoCourses> toDtoList(List<Courses> courses){
-        return courses.stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
+    public Page<DtoCourses> toDtoPage(Page<Courses> courses){
+        return courses!=null?courses.map(this::toDto):null;
     }
 }

@@ -6,6 +6,8 @@ import com.hediyesilaozyurt.mapper.MainDepartmentMapper;
 import com.hediyesilaozyurt.repository.respository.MainDepartmentRepository;
 import com.hediyesilaozyurt.services.services.IMainDepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,9 +30,9 @@ public class MainDepartmentServiceImpl implements IMainDepartmentService {
     }
 
     @Override
-    public List<DtoMainDepartment> list() {
-        List<MainDepartment> mainDepartments=mainDepartmentRepository.findAll();
-        return mainDepartmentMapper.toDtoList(mainDepartments);
+    public Page<DtoMainDepartment> findAll(Pageable pageable) {
+        Page<MainDepartment> mainDepartments=mainDepartmentRepository.findAll(pageable);
+        return mainDepartmentMapper.toDtoPage(mainDepartments);
     }
 
     @Override

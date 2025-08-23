@@ -1,5 +1,6 @@
 package com.hediyesilaozyurt.entities.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,6 +21,7 @@ public class StudentCard {
     private Long id;
 
     @Column(name="card_number",nullable = false,unique = true)
+    @JsonProperty("cardNumber")
     private String cardNumber;
 
     @Column(name = "issue_date",nullable = false)

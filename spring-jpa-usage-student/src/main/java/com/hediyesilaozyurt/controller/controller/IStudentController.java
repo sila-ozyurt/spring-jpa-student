@@ -3,7 +3,7 @@ package com.hediyesilaozyurt.controller.controller;
 import com.hediyesilaozyurt.dto.dto.DtoStudentRequest;
 import com.hediyesilaozyurt.dto.dto.DtoStudentResponse;
 import com.hediyesilaozyurt.entities.soleResponseType.RootEntity;
-import com.hediyesilaozyurt.utils.RestPageableRequest;
+import com.hediyesilaozyurt.dto.utils.RestPageableRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 

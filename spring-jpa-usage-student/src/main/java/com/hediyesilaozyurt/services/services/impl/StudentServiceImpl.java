@@ -25,9 +25,9 @@ public class StudentServiceImpl implements IStudentService {
     private StudentRepository studentRepository;
 
     @Override
-    public List<DtoStudentResponse> findAll(Pageable pageable) {
+    public Page<DtoStudentResponse> findAll(Pageable pageable) {
        Page<Student> students= studentRepository.findAll(pageable);
-       return studentMapper.toDtoList(students);
+       return studentMapper.toDtoPage(students);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class StudentServiceImpl implements IStudentService {
     @Override
     public Page<DtoStudentResponse> findStudentByCourseId(Long courseId,Pageable pageable) {
         Page<Student> students=studentRepository.findStudentByCourseId(courseId,pageable);
-        Page<DtoStudentResponse> dtoStudents=studentMapper.toDtoList(students);
+        Page<DtoStudentResponse> dtoStudents=studentMapper.toDtoPage(students);
         return dtoStudents;
     }
 
@@ -68,13 +68,13 @@ public class StudentServiceImpl implements IStudentService {
     @Override
     public Page<DtoStudentResponse> sortByBirthDate(Pageable pageable) {
         Page<Student> students= studentRepository.sortByBirthDate(pageable);
-        return studentMapper.toDtoList(students);
+        return studentMapper.toDtoPage(students);
     }
 
     @Override
     public Page<DtoStudentResponse> searchByFirstName(String name,Pageable pageable) {
         Page<Student> students=studentRepository.searchByFirstName(name,pageable);
-        return studentMapper.toDtoList(students);
+        return studentMapper.toDtoPage(students);
     }
 
     @Override
@@ -103,6 +103,6 @@ public class StudentServiceImpl implements IStudentService {
     @Override
     public Page<DtoStudentResponse> getStudentsByDepartment(Long id,Pageable pageable) {
         Page<Student> students=studentRepository.getStudentsByDepartment(id,pageable);
-        return studentMapper.toDtoList(students);
+        return studentMapper.toDtoPage(students);
     }
 }

@@ -4,10 +4,9 @@ import com.hediyesilaozyurt.dto.dto.DtoStudentCard;
 import com.hediyesilaozyurt.entities.entities.StudentCard;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class StudentCardMapper {
@@ -23,9 +22,7 @@ public class StudentCardMapper {
         return studentCard!=null ? modelMapper.map(studentCard, DtoStudentCard.class):null;
     }
 
-    public List<DtoStudentCard> toDtoList(List<StudentCard> studentCards){
-        return studentCards.stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
+    public Page<DtoStudentCard> toDtoPage(Page<StudentCard> studentCards) {
+        return studentCards != null ? studentCards.map(this::toDto) : null;
     }
 }

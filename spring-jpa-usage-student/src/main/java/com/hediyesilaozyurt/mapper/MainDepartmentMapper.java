@@ -5,6 +5,7 @@ import com.hediyesilaozyurt.dto.dto.DtoMainDepartment;
 import com.hediyesilaozyurt.entities.entities.MainDepartment;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -24,10 +25,8 @@ public class MainDepartmentMapper {
         return dtoMainDepartment!=null ?modelMapper.map(dtoMainDepartment, MainDepartment.class):null;
     }
 
-    public List<DtoMainDepartment> toDtoList(List<MainDepartment> mainDepartments){
-        return mainDepartments.stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
+    public Page<DtoMainDepartment> toDtoPage(Page<MainDepartment> mainDepartments){
+        return mainDepartments!=null? mainDepartments.map(this::toDto):null;
     }
 
     public MainDepartment updateEntityFromDto(DtoMainDepartment dto,MainDepartment entity){

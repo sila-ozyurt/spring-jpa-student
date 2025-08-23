@@ -2,10 +2,13 @@ package com.hediyesilaozyurt.controller.controller.impl;
 
 import com.hediyesilaozyurt.controller.controller.IMainDepartmentController;
 import com.hediyesilaozyurt.dto.dto.DtoMainDepartment;
+import com.hediyesilaozyurt.dto.utils.RestPageableRequest;
 import com.hediyesilaozyurt.entities.soleResponseType.RootEntity;
 import com.hediyesilaozyurt.services.services.IMainDepartmentService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,12 +28,7 @@ public class MainDepartmentControllerImpl extends RestBaseController implements 
     public RootEntity<DtoMainDepartment> save(@RequestBody @Valid DtoMainDepartment dtoMainDepartment) {
         DtoMainDepartment dto=mainDepartmentService.save(dtoMainDepartment);
 
-        if(dto!=null){
-            return ok(dto);
-        }
-        else{
-            return error(dto);
-        }
+        return createResponse(dto);
     }
 
     //public
@@ -39,25 +37,17 @@ public class MainDepartmentControllerImpl extends RestBaseController implements 
     public RootEntity<Optional<DtoMainDepartment>> findById(@PathVariable(name="id") Long id) {
         Optional<DtoMainDepartment> optionalDtoMainDepartment=mainDepartmentService.findById(id);
 
-        if(optionalDtoMainDepartment.isPresent()){
-            return ok(optionalDtoMainDepartment);
-        }
-        else{
-            return error(optionalDtoMainDepartment);
-        }
+        return createResponse(optionalDtoMainDepartment);
     }
 
     //public
     @Override
     @GetMapping("/list")
-    public RootEntity<List<DtoMainDepartment> > list() {
-        List<DtoMainDepartment> dtoMainDepartments=mainDepartmentService.list();
+    public RootEntity<Page<DtoMainDepartment>> findAll(@ModelAttribute RestPageableRequest pageableRequest) {
+        Pageable pageable=toPageAble(pageableRequest);
+        Page<DtoMainDepartment> dtoMainDepartments=mainDepartmentService.findAll(pageable);
 
-        if(dtoMainDepartments!=null){
-            return ok(dtoMainDepartments);
-        }else{
-            return error(dtoMainDepartments);
-        }
+        return createResponse(dtoMainDepartments);
     }
 
     @Override
@@ -67,11 +57,6 @@ public class MainDepartmentControllerImpl extends RestBaseController implements 
                                                 @RequestBody @Valid DtoMainDepartment mainDepartment) {
         DtoMainDepartment dto=mainDepartmentService.update(id,mainDepartment);
 
-        if(dto!=null){
-            return ok(dto);
-        }
-        else{
-            return error(dto);
-        }
+        return createResponse(dto);
     }
 }

@@ -1,8 +1,11 @@
 package com.hediyesilaozyurt.controller.controller;
 
 import com.hediyesilaozyurt.dto.dto.DtoStudentCard;
+import com.hediyesilaozyurt.dto.utils.RestPageableRequest;
 import com.hediyesilaozyurt.entities.soleResponseType.RootEntity;
 import org.apache.coyote.Response;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -15,7 +18,7 @@ public interface IStudentCardController {
 
     public RootEntity<Optional<DtoStudentCard>> findById(Long id);
 
-    public RootEntity<List<DtoStudentCard>> list();
+    public RootEntity<Page<DtoStudentCard>> findAll(RestPageableRequest pageableRequest);
 
     public ResponseEntity<?> delete(Long id);
 }

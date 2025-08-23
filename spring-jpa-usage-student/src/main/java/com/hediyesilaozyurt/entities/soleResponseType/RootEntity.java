@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RootEntity <T> {
+public class  RootEntity <T> {
 
     private boolean result;
 

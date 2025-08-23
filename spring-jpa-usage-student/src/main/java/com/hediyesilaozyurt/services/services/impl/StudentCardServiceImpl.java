@@ -6,6 +6,8 @@ import com.hediyesilaozyurt.mapper.StudentCardMapper;
 import com.hediyesilaozyurt.repository.respository.StudentCardRepository;
 import com.hediyesilaozyurt.services.services.IStudentCardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,9 +35,9 @@ public class StudentCardServiceImpl implements IStudentCardService {
     }
 
     @Override
-    public List<DtoStudentCard> list() {
-        List<StudentCard> studentCards=studentCardRepository.findAll();
-        return studentCardMapper.toDtoList(studentCards);
+    public Page<DtoStudentCard> findAll(Pageable pageable) {
+        Page<StudentCard> studentCards=studentCardRepository.findAll(pageable);
+        return studentCardMapper.toDtoPage(studentCards);
     }
 
     @Override

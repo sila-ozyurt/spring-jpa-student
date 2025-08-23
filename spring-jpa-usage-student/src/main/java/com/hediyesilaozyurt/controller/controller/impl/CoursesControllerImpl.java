@@ -2,10 +2,13 @@ package com.hediyesilaozyurt.controller.controller.impl;
 
 import com.hediyesilaozyurt.controller.controller.ICoursesController;
 import com.hediyesilaozyurt.dto.dto.DtoCourses;
+import com.hediyesilaozyurt.dto.utils.RestPageableRequest;
 import com.hediyesilaozyurt.entities.soleResponseType.RootEntity;
 import com.hediyesilaozyurt.services.services.ICoursesService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,14 +25,19 @@ public class CoursesControllerImpl extends RestBaseController implements ICourse
     @PostMapping(path="/save")
     @PreAuthorize("hasRole('ADMIN')")
     public RootEntity<DtoCourses> save(@RequestBody @Valid DtoCourses dtoCourse) {
-        return ok(coursesService.save(dtoCourse));
+        DtoCourses savedCourse=coursesService.save(dtoCourse);
+
+        return createResponse(savedCourse);
     }
 
     //public
     @Override
     @GetMapping(path="/list")
-    public RootEntity<List<DtoCourses>> list() {
-        return ok(coursesService.list());
+    public RootEntity<Page<DtoCourses>> findAll(@ModelAttribute RestPageableRequest pageableRequest) {
+        Pageable pageable=toPageAble(pageableRequest);
+        Page<DtoCourses> dtoCourses=coursesService.findAll(pageable);
+
+        return createResponse(dtoCourses);
     }
 
 /*

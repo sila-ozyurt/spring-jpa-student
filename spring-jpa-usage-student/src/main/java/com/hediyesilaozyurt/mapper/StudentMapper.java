@@ -16,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -112,11 +114,20 @@ public class StudentMapper {
     }
 
 
-    public List<DtoStudentResponse> toDtoList(List<Student> students){
-        return students.stream()
+    public Page<DtoStudentResponse> toDtoPage(Page<Student> studentPage){
+
+        return studentPage==null? Page.empty(): studentPage.map(this::toDto);
+
+
+
+        /* if (studentPage==null) return null;
+
+        List<DtoStudentResponse> dtoList=studentPage.getContent().stream()
                 .map(this::toDto)
                 .collect(Collectors.toList());
-    }
+
+        return new PageImpl<>(dtoList,studentPage.getPageable(), studentPage.getTotalElements());
+*/    }
 
     public Student updateEntityFromDto(DtoStudentRequest requestDto, Student entity){
         if (requestDto == null || entity == null) {
