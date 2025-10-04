@@ -3,6 +3,7 @@ package com.hediyesilaozyurt.controller.controller.impl;
 import com.hediyesilaozyurt.controller.controller.IMainDepartmentController;
 import com.hediyesilaozyurt.dto.dto.DtoMainDepartment;
 import com.hediyesilaozyurt.dto.utils.RestPageableRequest;
+import com.hediyesilaozyurt.dto.utils.RestPageableResponse;
 import com.hediyesilaozyurt.entities.soleResponseType.RootEntity;
 import com.hediyesilaozyurt.services.services.IMainDepartmentService;
 import jakarta.validation.Valid;
@@ -43,11 +44,12 @@ public class MainDepartmentControllerImpl extends RestBaseController implements 
     //public
     @Override
     @GetMapping("/list")
-    public RootEntity<Page<DtoMainDepartment>> findAll(@ModelAttribute RestPageableRequest pageableRequest) {
+    public RootEntity<RestPageableResponse<DtoMainDepartment>> findAll(@ModelAttribute RestPageableRequest pageableRequest) {
         Pageable pageable=toPageAble(pageableRequest);
         Page<DtoMainDepartment> dtoMainDepartments=mainDepartmentService.findAll(pageable);
+        RestPageableResponse response=toPageableResponse(dtoMainDepartments,dtoMainDepartments.getContent());
 
-        return createResponse(dtoMainDepartments);
+        return createResponse(response);
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.hediyesilaozyurt.controller.controller.impl;
 import com.hediyesilaozyurt.controller.controller.IStudentCardController;
 import com.hediyesilaozyurt.dto.dto.DtoStudentCard;
 import com.hediyesilaozyurt.dto.utils.RestPageableRequest;
+import com.hediyesilaozyurt.dto.utils.RestPageableResponse;
 import com.hediyesilaozyurt.entities.soleResponseType.RootEntity;
 import com.hediyesilaozyurt.services.services.IStudentCardService;
 import jakarta.validation.Valid;
@@ -28,11 +29,12 @@ public class StudentCardControllerImpl extends RestBaseController implements ISt
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/list")
-    public RootEntity<Page<DtoStudentCard>> findAll(@ModelAttribute RestPageableRequest pageableRequest) {
+    public RootEntity<RestPageableResponse<DtoStudentCard>> findAll(@ModelAttribute RestPageableRequest pageableRequest) {
         Pageable pageable=toPageAble(pageableRequest);
         Page<DtoStudentCard> dtoStudentCards=studentCardService.findAll(pageable);
+        RestPageableResponse response=toPageableResponse(dtoStudentCards,dtoStudentCards.getContent());
 
-        return createResponse(dtoStudentCards);
+        return createResponse(response);
     }
 
     @Override

@@ -1,10 +1,15 @@
 package com.hediyesilaozyurt.controller.controller.impl;
 
+import com.hediyesilaozyurt.dto.utils.PageUtil;
 import com.hediyesilaozyurt.dto.utils.RestPageableRequest;
+import com.hediyesilaozyurt.dto.utils.RestPageableResponse;
 import com.hediyesilaozyurt.entities.soleResponseType.RootEntity;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+
+import java.util.List;
 
 public class RestBaseController {
 
@@ -21,15 +26,11 @@ public class RestBaseController {
     }
 
     protected Pageable toPageAble(RestPageableRequest pageableRequest){
-        Sort sort=pageableRequest.isAsc()?
-                Sort.by(Sort.Direction.ASC, pageableRequest.getColumnName()):
-                Sort.by(Sort.Direction.DESC, pageableRequest.getColumnName());
+        return PageUtil.toPageAble(pageableRequest);
+    }
 
-        Pageable pageable= PageRequest.of(pageableRequest.getPageNumber(),
-                pageableRequest.getPageSize(),
-                sort);
-
-        return pageable;
+    protected <T> RestPageableResponse<T> toPageableResponse(Page<?> page, List<T> content){
+        return PageUtil.toPageableResponse(page,content);
     }
 }
 
