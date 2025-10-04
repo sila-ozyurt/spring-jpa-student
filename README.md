@@ -1,41 +1,59 @@
 # spring-jpa-student
 
 
-THIS README IS NOT UP-TO-DATE, IT WILL BE UPDATED SOON
-
 ## Contributors
 - Sıla Özyurt (https://github.com/sila-ozyurt)
 
 This project contributed by Aykut Büyükkılıç (linkedin.com/in/aykutbuyukkilic) during my internship term in İŞ YAZILIM
 
 
-> Full-stack ready RESTful backend application for managing students, courses, departments, and student cards.
+>A full-stack **Spring Boot Student Management API** that supports **JWT Authentication**, **Role-Based Access Control**, **Exception Handling**, and **Data Management** for students, courses, departments, and student cards.  
 
-> Öğrenci, ders, bölüm ve öğrenci kartı işlemlerini yöneten Spring Boot tabanlı RESTful backend uygulaması.
+> JWT tabanlı kimlik doğrulama, rol bazlı yetkilendirme, hata yönetimi ve öğrenci, bölüm, ders, öğrenci kartı yönetimi sunan Spring Boot REST API projesi.
 
+---
+## 🚀 Features
+- 🔐 **Authentication & Authorization** with JWT (Access & Refresh Tokens)  
+- 👨‍🎓 Manage **Students**, **Departments**, **Courses**, **Student Cards**  
+- 📊 **Department Statistics** with Scheduled Tasks  
+- 🛡️ **Global Exception Handling** (validation, DB constraints, type mismatches)  
+- 🗂️ DTO & Mapper Layer for clean data transfer  
+- 🗄️ Repositories with custom queries (pagination, search, statistics)  
+- ⚡ REST API with clear response wrapper (`RootEntity<T>`)  
+
+
+🔐 JWT ile Kimlik Doğrulama & Yetkilendirme
+👨‍🎓 Öğrenci, Bölüm, Ders, Öğrenci Kartı yönetimi
+📊 Zamanlanmış Görevler ile departman istatistikleri
+🛡️ Global Exception Handling (doğrulama, DB constraint, tip hataları)
+🗂️ DTO & Mapper yapısı
+🗄️ Repository özel sorguları (sayfalama, arama, istatistik)
+⚡ Response Wrapper (RootEntity<T>)
 ---
 
 ## 📌 Project Description | Proje Açıklaması
 
-This is a **Spring Boot** project built to manage student records, their departments, courses, and student cards.  
-The system is modular and includes layered architecture with DTOs, Entities, Repositories, Mappers, Services, Controllers, and a Global Exception Handler.
+This is a Spring Boot application designed to manage students, their departments, courses, and student cards.
+It follows a layered architecture, including DTOs, Entities, Repositories, Mappers, Services, Controllers, and a Global Exception Handler for clean and maintainable code.
 
-Bu proje, öğrenciler, bölümler, dersler ve öğrenci kartlarını yönetmek amacıyla geliştirilmiş bir **Spring Boot** uygulamasıdır.  
-Katmanlı mimari kullanılarak, DTO, Entity, Repository, Mapper, Service, Controller ve küresel hata yönetimi sınıflarıyla yapılandırılmıştır.
+Bu proje, öğrenciler, bölümler, dersler ve öğrenci kartlarını yönetmek amacıyla geliştirilmiş bir Spring Boot uygulamasıdır.
+Katmanlı mimari kullanılarak; DTO, Entity, Repository, Mapper, Service, Controller ve küresel hata yönetimi sınıflarıyla yapılandırılmıştır.
 
 ---
 
 ## 🗂 Project Structure | Proje Yapısı
 com.hediyesilaozyurt
+├── config  #mapper, security, swagger etc. config files
 ├── controller # REST API controllers
 ├── dto # Data Transfer Objects (DTOs)
 ├── entities # JPA Entities
 ├── exception # Exception Handling
+├── jwt
 ├── mapper # ModelMapper-based entity/DTO conversion
 ├── repository # JPA Repository interfaces
+├── scheduled
 ├── services # Service Interfaces
-├── services.impl # Service Implementations
-└── config # Configuration classes
+└── starter
 
 
 
@@ -43,13 +61,23 @@ com.hediyesilaozyurt
 
 ## ✅ Main Features | Ana Özellikler
 
-- 🎓 Create, Read, Update, Delete for Students (Öğrenci işlemleri)
-- 🆔 StudentCard assignment and search (Öğrenci kartı atama ve arama)
-- 📚 Course management and student-course relations (Ders ve kayıt ilişkileri)
-- 🏛 Department creation and listing (Bölüm yönetimi)
-- 🔎 Search students by name (İsme göre arama)
-- 📅 Sort students by birth date (Doğum tarihine göre sıralama)
-- 🌐 Global exception handling with custom response format (Özelleştirilmiş global hata yönetimi)
+- 🎓 CRUD operations for students (Öğrenci işlemleri)
+
+🆔 StudentCard assignment & lookup (Öğrenci kartı atama ve arama)
+
+📚 Course management & student-course relationships (Ders yönetimi ve öğrenci-ders ilişkileri)
+
+🏛 Department creation & listing (Bölüm yönetimi)
+
+🔎 Search students by name (İsme göre öğrenci arama)
+
+📅 Sort students by birth date (Doğum tarihine göre sıralama)
+
+🌐 Global Exception Handling with custom response (Özelleştirilmiş global hata yönetimi)
+
+🔐 JWT Authentication & Role-based Authorization (JWT ile kimlik doğrulama ve rol bazlı yetkilendirme)
+
+⏰ Scheduled tasks for department statistics (Departman istatistikleri için zamanlanmış görev)
 
 ---
 
